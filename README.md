@@ -53,12 +53,16 @@ openssl passwd -6 ${PASSWORD}
 
 6. Add the password to `conf/local.conf`. Escape dollar signs in hash with `\`:
 ```
-SERVICEUSER_PASSWD = "<HASH_FROM_PREVIOUS COMMAND>"
+SERVICEUSER_PASSWORD = "<HASH_FROM_PREVIOUS COMMAND>"
 ```
 
 7. (Optional) Edit the firewall template in `meta-sulka-distro/recipes-filter/nftables-configuration/files/nftables.conf.template`.
 
-8. Build your image, for example `core-image-base`:
+8. (Optional) Edit the sudo configuration for the service user in `meta-sulka-distro/recipes-extended/sudo/files/serviceuser.conf`
+
+9. Build your image, for example `core-image-base`:
 ```
 bitbake core-image-base
 ```
+
+10. Run the image, and login as the `serviceuser` using the password defined earlier
