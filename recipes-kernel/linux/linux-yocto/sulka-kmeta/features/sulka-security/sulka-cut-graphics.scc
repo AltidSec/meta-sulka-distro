@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: MIT
+define KFEATURE_DESCRIPTION "Disable graphics features to reduce kernel attack surface"
+define KFEATURE_COMPATIBILITY all
+
+kconf non-hardware sulka-cut-graphics.cfg

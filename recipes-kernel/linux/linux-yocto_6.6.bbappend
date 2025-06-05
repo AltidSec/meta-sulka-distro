@@ -9,3 +9,7 @@ KERNEL_FEATURES:append = " \
     features/sulka-security/sulka-cut-attack-surface.scc \
     features/sulka-security/sulka-self-protection.scc \
 "
+
+KERNEL_FEATURES:append:sulka-disable-graphics = " \
+    features/sulka-security/sulka-cut-graphics.scc \
+"
