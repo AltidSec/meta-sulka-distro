@@ -18,7 +18,7 @@ addhandler check_serviceuser_password
 check_serviceuser_password[eventmask] = "bb.event.ConfigParsed bb.event.MultiConfigParsed"
 
 python check_serviceuser_password () {
-    serviceuser_password = (d.getVar('SERVICEUSER_PASSWORD') or '')
+    serviceuser_password = (d.getVar('SULKA_SERVICEUSER_PASSWORD') or '')
     if serviceuser_password == '':
-        bb.note("SERVICEUSER_PASSWORD is not set, login user will not be created")
+        bb.note("SULKA_SERVICEUSER_PASSWORD is not set, login user will not be created")
 }
