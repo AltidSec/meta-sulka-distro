@@ -65,9 +65,14 @@ SULKA_SERVICEUSER_USERNAME = "<USERNAME>"
 
 9. (Optional) Edit the sudo configuration for the service user in `meta-sulka-distro/recipes-extended/sudo/files/serviceuser.conf`
 
-10. Build your image, for example `core-image-base`:
+10. (Optional) Enable the graphics support if you device requires it:
+```
+SULKA_DISABLE_GRAPHICS = "0"
+```
+
+11. Build your image, for example `core-image-base`:
 ```
 bitbake core-image-base
 ```
 
-11. Run the image, and login as the service user using the password defined earlier
+12. Run the image, and login as the service user using the password defined earlier
