@@ -12,6 +12,11 @@ python check_insecure_image_features () {
         bb.fatal("ERROR: Insecure IMAGE_FEATURES detected: %s\n"
                  "These features are not allowed in this distribution.\n"
                  "Disable these by adding IMAGE_FEATURES:remove = \"<insecure features>\" to your build config. " % ', '.join(found_insecure))
+
+    if "ssh-server-dropbear" in image_features:
+        bb.warn("ssh-server-dropbear is in the IMAGE_FEATURES.\n"
+                "The configuration of the dropbear is not hardened.\n"
+                "Please use ssh-server-openssh instead.")
 }
 
 addhandler check_serviceuser_password
