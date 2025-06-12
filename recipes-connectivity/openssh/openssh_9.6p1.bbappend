@@ -8,6 +8,10 @@ do_install:append () {
     sed -i -e 's:#AllowAgentForwarding yes:AllowAgentForwarding no:' ${D}${sysconfdir}/ssh/sshd_config
     sed -i -e 's:#PermitRootLogin.*:PermitRootLogin no:' ${D}${sysconfdir}/ssh/sshd_config
     sed -i -e 's:#PasswordAuthentication.*:PasswordAuthentication no:' ${D}${sysconfdir}/ssh/sshd_config
+    sed -i -e 's:#MaxAuthTries.*:MaxAuthTries 3:' ${D}${sysconfdir}/ssh/sshd_config
 
     sed -i -e 's:#Banner.*:Banner /etc/issue.net:' ${D}${sysconfdir}/ssh/sshd_config
+
+    chmod 600 ${D}${sysconfdir}/ssh/sshd_config
+    chmod 600 ${D}${sysconfdir}/ssh/sshd_config_readonly
 }
