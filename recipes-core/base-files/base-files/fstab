@@ -5,3 +5,4 @@ devpts               /dev/pts             devpts     mode=0620,ptmxmode=0666,gid
 # Note: noexec in /run and /tmp (/var/volatile/tmp) may cause problems with legit scripts, adjust if necessary
 tmpfs                /run                 tmpfs      mode=0755,nodev,nosuid,noexec,strictatime 0  0
 tmpfs                /var/volatile        tmpfs      nodev,nosuid,noexec                       0  0
+@@SULKA_FSTAB_EXTRA_LINES@@
