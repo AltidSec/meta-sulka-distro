@@ -21,58 +21,58 @@ This makes the distribution require some setup before being actually usable, unl
 ## Getting Started
 
 1. Clone the `poky` and `meta-sulka-distro` repositories. Clone the dependency `meta-openembedded` as well: 
-```
-git clone git://git.yoctoproject.org/poky
-cd poky
-git clone git://git.openembedded.org/meta-openembedded
-git clone https://codeberg.org/AltidSec/meta-sulka-distro.git
-```
+    ```
+    git clone git://git.yoctoproject.org/poky
+    cd poky
+    git clone git://git.openembedded.org/meta-openembedded
+    git clone https://codeberg.org/AltidSec/meta-sulka-distro.git
+    ```
 
-2. Source the build environment to create the build directory:
-```
-source oe-init-build-env
-``` 
+1. Source the build environment to create the build directory:
+    ```
+    source oe-init-build-env
+    ```
 
-3. Edit `conf/bblayers.conf`, remove `meta-poky` **and** add the meta-layers:
-```
-/path/to/meta-sulka-distro \
-/path/to/meta-openembedded/meta-oe \
-/path/to/meta-openembedded/meta-python \
-/path/to/meta-openembedded/meta-networking \
-```
+1. Edit `conf/bblayers.conf`, remove `meta-poky` **and** add the meta-layers:
+    ```
+    /path/to/meta-sulka-distro \
+    /path/to/meta-openembedded/meta-oe \
+    /path/to/meta-openembedded/meta-python \
+    /path/to/meta-openembedded/meta-networking \
+    ```
 
-4. Set `DISTRO` to `sulka` in `conf/local.conf`:
-```
-DISTRO = "sulka"
-```
+1. Set `DISTRO` to `sulka` in `conf/local.conf`:
+    ```
+    DISTRO = "sulka"
+    ```
 
-5. Generate a password for the service user that can be used to log in.
-```
-openssl passwd -6 ${PASSWORD}
-```
+1. Generate a password for the service user that can be used to log in.
+    ```
+    openssl passwd -6 ${PASSWORD}
+    ```
 
-6. Add the password to `conf/local.conf`. Escape dollar signs in hash with `\`:
-```
-SULKA_SERVICEUSER_PASSWORD = "<HASH_FROM_PREVIOUS COMMAND>"
-```
+1. Add the password to `conf/local.conf`. Escape dollar signs in hash with `\`:
+    ```
+    SULKA_SERVICEUSER_PASSWORD = "<HASH_FROM_PREVIOUS COMMAND>"
+    ```
 
-7. (Optional) Change the default service user username `serviceuser` to something else:
-```
-SULKA_SERVICEUSER_USERNAME = "<USERNAME>"
-```
+1. (Optional) Change the default service user username `serviceuser` to something else:
+    ```
+    SULKA_SERVICEUSER_USERNAME = "<USERNAME>"
+    ```
 
-8. (Optional) Edit the firewall template in `meta-sulka-distro/recipes-filter/nftables-configuration/files/nftables.conf.template`.
+1. (Optional) Edit the firewall template in `meta-sulka-distro/recipes-filter/nftables-configuration/files/nftables.conf.template`.
 
-9. (Optional) Edit the sudo configuration for the service user in `meta-sulka-distro/recipes-extended/sudo/files/serviceuser.conf`
+1. (Optional) Edit the sudo configuration for the service user in `meta-sulka-distro/recipes-extended/sudo/files/serviceuser.conf`
 
-10. (Optional) Enable the graphics support if you device requires it:
-```
-SULKA_DISABLE_GRAPHICS = "0"
-```
+1. (Optional) Enable the graphics support if you device requires it:
+    ```
+    SULKA_DISABLE_GRAPHICS = "0"
+    ```
 
-11. Build your image, for example `core-image-base`:
-```
-bitbake core-image-base
-```
+1. Build your image, for example `core-image-base`:
+    ```
+    bitbake core-image-base
+    ```
 
-12. Run the image, and login as the service user using the password defined earlier
+1. Run the image, and login as the service user using the password defined earlier
