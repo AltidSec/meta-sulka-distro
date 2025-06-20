@@ -1,3 +1,6 @@
+# This should be identical to the main recipe, except that shell has been changed to nologin
+USERADD_PARAM:${PN}-sshd = "--system --no-create-home --home-dir /var/run/sshd --shell /sbin/nologin --user-group sshd"
+
 # Bulk of these values originate from meta-security/meta-hardening
 do_install:append () {
     sed -i -e 's:#AllowTcpForwarding yes:AllowTcpForwarding no:' ${D}${sysconfdir}/ssh/sshd_config*
