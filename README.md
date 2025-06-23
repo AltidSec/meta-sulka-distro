@@ -29,10 +29,10 @@ This makes the distribution require some setup before being actually usable, unl
 
 1. Generate a password for the service user that can be used to log in.
     ```
-    openssl passwd -6 <SECRET_PASSWORD>
+    mkpasswd -m yescrypt -s -R 8 <SECRET_PASSWORD>
     ```
 
-1. Add the password to `kas-sulka-configuration.yml`. Escape the three dollar signs in hash with `\`:
+1. Add the password to `kas-sulka-configuration.yml`. Escape the four dollar signs in hash with `\`:
     ```
     SULKA_SERVICEUSER_PASSWORD = "<HASH_FROM_PREVIOUS COMMAND>"
     ```
