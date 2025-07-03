@@ -52,7 +52,7 @@ This makes the distribution require some setup before being actually usable, unl
     kas checkout kas-sulka.yml
     ```
 
-1. (Optional) Edit the firewall template in `meta-sulka-distro/recipes-filter/nftables-configuration/files/nftables.conf.template`.
+1. (Optional) Edit the firewall template in `meta-sulka-distro/recipes-filter/nftables-configuration/files/nftables-drop-everything.conf`, or select one of the other templates with `SULKA_NFTABLES_CONF` configuration variable.
 
 1. (Optional) Edit the sudo configuration for the service user in `meta-sulka-distro/recipes-extended/sudo/files/serviceuser.conf` to enable sudo.
 
