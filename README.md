@@ -32,6 +32,12 @@ This makes the distribution require some setup before being actually usable, unl
     mkpasswd -m yescrypt -s -R 8 <SECRET_PASSWORD>
     ```
 
+   For assigning the resulting encrypted password to a variable in a Yocto-style build, dollar signs have to be escaped with `\`. This can be combined with the password creation process:
+    ```
+    mkpasswd -m yescrypt -s -R 8 test | sed 's/\$/\\$/g'
+    ```
+   This hashes the password "test" and prepares the resulting hash for pasting into a Yocto configuration file.
+
 1. Add the password to `kas-sulka-configuration.yml`. Escape the four dollar signs in hash with `\`:
     ```
     SULKA_SERVICEUSER_PASSWORD = "<HASH_FROM_PREVIOUS COMMAND>"
