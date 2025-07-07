@@ -1,0 +1,2 @@
+-a always,exit -F arch=b32 -F path=/var/log/audit/audit.log -F perm=wa -F key=modify-audit-trail
+-a always,exit -F arch=b64 -F path=/var/log/audit/audit.log -F perm=wa -F key=modify-audit-trail
