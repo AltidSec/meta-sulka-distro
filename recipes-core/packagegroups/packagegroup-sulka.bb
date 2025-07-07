@@ -8,6 +8,8 @@ inherit packagegroup
 PACKAGES += "${PN}-netfilter-modules"
 
 RDEPENDS:${PN} = "\
+    auditd \
+    dpkg-start-stop \
     nftables \
     nftables-configuration \
     sudo \
