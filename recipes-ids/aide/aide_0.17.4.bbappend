@@ -1,0 +1,4 @@
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
+
+AIDE_INCLUDE_DIRS = ""
+AIDE_SKIP_DIRS    = ""
