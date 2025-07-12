@@ -15,6 +15,9 @@ do_install:append () {
 
     sed -i -e 's:#Banner.*:Banner /etc/issue.net:' ${D}${sysconfdir}/ssh/sshd_config*
 
+    if [ "${SULKA_SSH_PORT}" -ne "22" ]; then
+        sed -i -e "s:#Port.*:Port ${SULKA_SSH_PORT}:" ${D}${sysconfdir}/ssh/sshd_config*
+    fi
     chmod 600 ${D}${sysconfdir}/ssh/sshd_config
     chmod 600 ${D}${sysconfdir}/ssh/sshd_config_readonly
 }
