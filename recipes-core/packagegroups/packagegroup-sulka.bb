@@ -13,6 +13,7 @@ RDEPENDS:${PN} = "\
     dpkg-start-stop \
     nftables \
     nftables-configuration \
+    passwdqc \
     sudo \
 "
 

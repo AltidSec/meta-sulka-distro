@@ -32,6 +32,8 @@ This makes the distribution require some setup before being actually usable, unl
     mkpasswd -m yescrypt -s -R 8 <SECRET_PASSWORD>
     ```
 
+   When you update your password, the system requires that it be at least 14 characters long and include at least one character from at least three of the following four character classes: lowercase letters, uppercase letters, digits, and special characters. It is recommended that your initial password meets these requirements.
+
    For assigning the resulting encrypted password to a variable in a Yocto-style build, dollar signs have to be escaped with `\`. This can be combined with the password creation process:
     ```
     mkpasswd -m yescrypt -s -R 8 test | sed 's/\$/\\$/g'
