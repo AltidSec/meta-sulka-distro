@@ -10,11 +10,13 @@ PACKAGES += "${PN}-netfilter-modules"
 RDEPENDS:${PN} = "\
     aide \
     auditd \
+    cronie \
     dpkg-start-stop \
     nftables \
     nftables-configuration \
     passwdqc \
     sudo \
+    sysstat \
 "
 
 RDEPENDS:${PN}-netfilter-modules = "\
