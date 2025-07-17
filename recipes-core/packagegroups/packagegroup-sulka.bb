@@ -8,6 +8,7 @@ inherit packagegroup
 PACKAGES += "${PN}-netfilter-modules"
 
 RDEPENDS:${PN} = "\
+    acct \
     aide \
     auditd \
     cronie \
