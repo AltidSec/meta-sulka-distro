@@ -16,7 +16,7 @@ do_install:append () {
 #
 # NOTE: This will most likely require you to change the password on the
 # first login!
-do_install:append:sulka-compliancy () {
+do_install:append:sulka-expire-passwords () {
     sed -i 's/PASS_MIN_DAYS.*/PASS_MIN_DAYS	7/g'   ${D}/${sysconfdir}/login.defs
     sed -i 's/PASS_MAX_DAYS.*/PASS_MAX_DAYS	365/g' ${D}/${sysconfdir}/login.defs
 }
