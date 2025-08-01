@@ -10,6 +10,8 @@ much preferred.
 Author:  Diego Elio Pettenò <flameeyes@gmail.com>
 Upstream: https://savannah.gnu.org/patch/?7473
 
+Upstream-Status: Submitted [https://savannah.gnu.org/patch/?7473]
+
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -69,11 +69,6 @@ SYS_LASTCOMM = @SYS_LASTCOMM@
