@@ -70,3 +70,10 @@ This makes the distribution require some setup before being actually usable, unl
     ```
 
 1. Run the image, and login as the service user using the password defined earlier
+
+## Contributing
+
+Send pull requests, patches, comments or questions to the AltidSec repositories in Codeberg, and feel free to open issues to start discussions.
+
+Maintainer:
+Esa Jääskelä <esa.jaaskela@suomi24.fi>
