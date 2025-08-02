@@ -1,1 +1,1 @@
-PACKAGECONFIG:append = " cron"
+PACKAGECONFIG:append:sulka = " cron"

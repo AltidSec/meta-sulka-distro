@@ -1,6 +1,6 @@
-EXTRA_OECONF:append = " --with-yescrypt"
+EXTRA_OECONF:append:sulka = " --with-yescrypt"
 
-do_install:append () {
+do_install:append:sulka () {
     sed -i 's/UMASK.*/UMASK		027/g' ${D}/${sysconfdir}/login.defs
     sed -i 's/ENCRYPT_METHOD SHA512/ENCRYPT_METHOD YESCRYPT/g' ${D}/${sysconfdir}/login.defs
     sed -i 's/#YESCRYPT_COST_FACTOR.*/YESCRYPT_COST_FACTOR 8/g' ${D}/${sysconfdir}/login.defs

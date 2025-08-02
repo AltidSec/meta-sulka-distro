@@ -1,6 +1,6 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS:prepend:sulka := "${THISDIR}/${PN}:"
 
-SRC_URI:append = " file://55-sulka.rules"
+SRC_URI:append:sulka = " file://55-sulka.rules"
 
 # Note that if these are changed, the pkg_postinst_ontarget function needs to be
 # revised as it makes changes to 30-stig and 31-privileged rules
@@ -16,7 +16,7 @@ AUDIT_RULES_TO_INSTALL = " \
     99-finalize.rules \
 "
 
-do_install:append() {
+do_install:append:sulka () {
     rm ${D}/etc/audit/rules.d/audit.rules
 
     for rule in ${AUDIT_RULES_TO_INSTALL}; do
@@ -30,7 +30,7 @@ do_install:append() {
     done
 }
 
-pkg_postinst_ontarget:${PN} () {
+pkg_postinst_ontarget:${PN}:sulka () {
     # Add all the setuid binaries to 31-privileged.rules. Note that
     # we do not add additional privileged binaries that could be
     # found with filecap search as filecap would be additional

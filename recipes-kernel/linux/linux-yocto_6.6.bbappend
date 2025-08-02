@@ -1,10 +1,10 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/linux-yocto:"
+FILESEXTRAPATHS:prepend:sulka := "${THISDIR}/linux-yocto:"
 
-SRC_URI:append = " \
+SRC_URI:append:sulka = " \
     file://sulka-kmeta;type=kmeta;name=sulka-kmeta;destsuffix=sulka-kmeta \
 "
 
-KERNEL_FEATURES:append = " \
+KERNEL_FEATURES:append:sulka = " \
     features/security/security.cfg \
     features/sulka-security/audit.scc \
     features/sulka-security/sulka-cut-attack-surface.scc \
