@@ -1,7 +1,16 @@
 ROOTFS_POSTPROCESS_COMMAND:append = " \
+    serviceuser_home_directory \
     remove_useradd_backup_files \
     harden_cron_directories \
 "
+
+serviceuser_home_directory() {
+  # Create serviceuser home directory in a separate task to avoid installing user writable
+  # files such as .bashrc and .profile
+  install -d ${IMAGE_ROOTFS}/${SULKA_SERVICEUSER_HOME}
+  chown root:${SULKA_SERVICEUSER_USERNAME} ${IMAGE_ROOTFS}/${SULKA_SERVICEUSER_HOME}
+  chmod 750 ${IMAGE_ROOTFS}/${SULKA_SERVICEUSER_HOME}
+}
 
 remove_useradd_backup_files () {
   rm -f ${IMAGE_ROOTFS}/etc/group-
