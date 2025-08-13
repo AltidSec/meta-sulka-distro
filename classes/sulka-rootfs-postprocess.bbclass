@@ -7,6 +7,10 @@ ROOTFS_POSTPROCESS_COMMAND:append = " \
 serviceuser_home_directory() {
   # Create serviceuser home directory in a separate task to avoid installing user writable
   # files such as .bashrc and .profile
+  if [ -z "${SULKA_SERVICEUSER_PASSWORD}" ]; then
+    return
+  fi
+
   install -d ${IMAGE_ROOTFS}/${SULKA_SERVICEUSER_HOME}
   chown root:${SULKA_SERVICEUSER_USERNAME} ${IMAGE_ROOTFS}/${SULKA_SERVICEUSER_HOME}
   chmod 750 ${IMAGE_ROOTFS}/${SULKA_SERVICEUSER_HOME}
