@@ -1,0 +1,14 @@
+[Unit]
+Description=nftables firewall rules
+After=local-fs.target
+Before=network-pre.target
+Wants=network-pre.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/sbin/nft -f /etc/nftables.conf
+TimeoutSec=30
+
+[Install]
+WantedBy=sysinit.target
