@@ -1,6 +1,9 @@
 FILESEXTRAPATHS:prepend:sulka := "${THISDIR}/${PN}:"
 
-SRC_URI:append:sulka = " file://55-sulka.rules"
+SRC_URI:append:sulka = " \
+    file://55-sulka.rules \
+    file://0002-Run-audit-rules.service-after-run-postinsts.service.patch \
+"
 
 # Note that if these are changed, the pkg_postinst_ontarget function needs to be
 # revised as it makes changes to 30-stig and 31-privileged rules

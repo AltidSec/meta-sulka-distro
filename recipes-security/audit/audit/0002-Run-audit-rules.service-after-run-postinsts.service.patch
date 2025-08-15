@@ -1,0 +1,33 @@
+From 0af5baa3ec298b075255b16fb76096eaf387d9cb Mon Sep 17 00:00:00 2001
+From: ejaaskel <esa.jaaskela@suomi24.fi>
+Date: Fri, 15 Aug 2025 09:25:06 +0300
+Subject: [PATCH] Run audit-rules.service after run-postinsts.service
+
+Sulka modifies the initial audit rules based on the filesystem content
+in a postinstall task. This is done in a postinstall task, because it is
+not possible for the audit recipe to know during build time what
+binaries and directories are in the final image. Therefore, we need to
+run the audit-rules.service after the post installation tasks have
+finished.
+
+Upstream-Status: Inappropriate [Sulka specific]
+---
+ init.d/audit-rules.service.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/init.d/audit-rules.service.in b/init.d/audit-rules.service.in
+index 73bfcaaf..883de129 100644
+--- a/init.d/audit-rules.service.in
++++ b/init.d/audit-rules.service.in
+@@ -5,7 +5,7 @@ ConditionKernelCommandLine=!audit=off
+ DefaultDependencies=no
+ # We need the local file system for the rules. Augenrules uses /tmp while
+ # constructing rules, so we have to wait for that to be available, too.
+-After=local-fs.target systemd-tmpfiles-setup.service
++After=local-fs.target systemd-tmpfiles-setup.service run-postinsts.service
+ 
+ Documentation=man:auditctl(8) https://github.com/linux-audit/audit-documentation
+ 
+-- 
+2.34.1
+
