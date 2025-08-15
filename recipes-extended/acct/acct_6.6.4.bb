@@ -23,15 +23,15 @@ do_install:append() {
     install -d ${D}/var/account
     touch ${D}/var/account/pacct
 
-    install -d ${D}/${sysconfdir}
-    install -d ${D}/${sysconfdir}/init.d
-
     if ${@bb.utils.contains('DISTRO_FEATURES','sysvinit','true','false',d)}; then
+        install -d ${D}/${sysconfdir}/init.d
+
         install -m 755 ${WORKDIR}/acct.sh ${D}/${sysconfdir}/init.d/acct
     fi
 
     if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
         install -d ${D}/${systemd_unitdir}/system
+
         install -m 0644 ${WORKDIR}/acct.service ${D}${systemd_unitdir}/system
     fi
 }
