@@ -1,0 +1,56 @@
+From 7a0af0a04c29aa38498dab2daf8a9486172a8636 Mon Sep 17 00:00:00 2001
+From: ejaaskel <esa.jaaskela@suomi24.fi>
+Date: Thu, 21 Aug 2025 14:06:46 +0300
+Subject: [PATCH] policy/modules/system/iptables: nftables fixes
+
+Allow iptables_t to read and write to the tty_device_t. Without this,
+there will be deny messages in the audit logs if nft command is executed
+from a context where ttyS0 is not unconfined (e.g. init script).
+However, despite this deny, the command still seems to be successful.
+
+Add new file configuration for systemd service nftables.service. This
+has the same context as iptables.service.
+---
+ policy/modules/system/iptables.fc | 1 +
+ policy/modules/system/iptables.te | 7 +++++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/policy/modules/system/iptables.fc b/policy/modules/system/iptables.fc
+index ba65e811d..4086a3872 100644
+--- a/policy/modules/system/iptables.fc
++++ b/policy/modules/system/iptables.fc
+@@ -28,6 +28,7 @@
+ /usr/lib/systemd/system/[^/]*ebtables.*	 --	gen_context(system_u:object_r:iptables_unit_t,s0)
+ /usr/lib/systemd/system/[^/]*ip6tables.* --	gen_context(system_u:object_r:iptables_unit_t,s0)
+ /usr/lib/systemd/system/[^/]*iptables.*	--	gen_context(system_u:object_r:iptables_unit_t,s0)
++/usr/lib/systemd/system/[^/]*nftables.*	--	gen_context(system_u:object_r:iptables_unit_t,s0)
+ 
+ /usr/sbin/conntrack			--	gen_context(system_u:object_r:iptables_exec_t,s0)
+ /usr/sbin/ebtables			--	gen_context(system_u:object_r:iptables_exec_t,s0)
+diff --git a/policy/modules/system/iptables.te b/policy/modules/system/iptables.te
+index 36970cd03..382fb571a 100644
+--- a/policy/modules/system/iptables.te
++++ b/policy/modules/system/iptables.te
+@@ -1,5 +1,10 @@
+ policy_module(iptables)
+ 
++gen_require(`
++	type tty_device_t;
++	class chr_file { read write };
++')
++
+ ########################################
+ #
+ # Declarations
+@@ -54,6 +59,8 @@ allow iptables_t iptables_tmp_t:dir manage_dir_perms;
+ allow iptables_t iptables_tmp_t:file manage_file_perms;
+ files_tmp_filetrans(iptables_t, iptables_tmp_t, { file dir })
+ 
++allow iptables_t tty_device_t:chr_file { read write };
++
+ kernel_getattr_proc(iptables_t)
+ kernel_request_load_module(iptables_t)
+ kernel_read_system_state(iptables_t)
+-- 
+2.34.1
+
