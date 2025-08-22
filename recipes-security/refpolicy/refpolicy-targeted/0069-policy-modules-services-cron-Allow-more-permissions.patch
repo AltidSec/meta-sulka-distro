@@ -1,0 +1,39 @@
+From 14cb333d989bca651e7a3896f4d0b0247b105cc1 Mon Sep 17 00:00:00 2001
+From: ejaaskel <esa.jaaskela@suomi24.fi>
+Date: Fri, 22 Aug 2025 13:53:21 +0300
+Subject: [PATCH] policy/modules/services/cron: Allow more permissions for
+ cronjobs
+
+The periodic sysstat cronjob that checks for the system resource usage
+needs wider permission set than the default one provided by the
+refpolicy. Add sys_admin capability to system_cronjob_t, and allow
+opening and reading sysctl_fs files.
+
+Note that this change is not required if sysstat is not installed.
+---
+ policy/modules/services/cron.te | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/policy/modules/services/cron.te b/policy/modules/services/cron.te
+index 9b81dac71..76b1232f8 100644
+--- a/policy/modules/services/cron.te
++++ b/policy/modules/services/cron.te
+@@ -442,12 +442,14 @@ optional_policy(`
+ # System local policy
+ #
+ 
+-allow system_cronjob_t self:capability { chown dac_override dac_read_search fowner fsetid net_admin net_bind_service setgid setuid sys_nice sys_resource };
++allow system_cronjob_t self:capability { chown dac_override dac_read_search fowner fsetid net_admin net_bind_service setgid setuid sys_admin sys_nice sys_resource };
+ allow system_cronjob_t self:process { getsched setrlimit setsched signal_perms };
+ allow system_cronjob_t self:fd use;
+ allow system_cronjob_t self:fifo_file rw_fifo_file_perms;
+ allow system_cronjob_t self:passwd rootok;
+ 
++allow system_cronjob_t sysctl_fs_t:file { read open };
++
+ allow system_cronjob_t cron_log_t:file manage_file_perms;
+ logging_log_filetrans(system_cronjob_t, cron_log_t, file)
+ 
+-- 
+2.34.1
+

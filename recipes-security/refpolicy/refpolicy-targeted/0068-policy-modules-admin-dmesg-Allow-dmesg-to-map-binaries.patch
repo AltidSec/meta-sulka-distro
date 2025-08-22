@@ -1,0 +1,43 @@
+From 3fc953510ab5f0f48596ab2abc2d0ecc1fb136cd Mon Sep 17 00:00:00 2001
+From: ejaaskel <esa.jaaskela@suomi24.fi>
+Date: Fri, 22 Aug 2025 13:39:43 +0300
+Subject: [PATCH] policy/modules/admin/dmesg: Allow dmesg to map binaries
+
+Allow dmesg_t process to map dmesg_t to map bin_t files. Without this,
+dmesg rotation script that is present in the sysvinit systems will fail.
+This patch should not be required for systemd systems, as they do not
+have this init service.
+
+Another alternative is using util-linux-dmesg package instead of the
+Busybox dmesg.
+---
+ policy/modules/admin/dmesg.te | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/policy/modules/admin/dmesg.te b/policy/modules/admin/dmesg.te
+index f1da315a9..d62656a93 100644
+--- a/policy/modules/admin/dmesg.te
++++ b/policy/modules/admin/dmesg.te
+@@ -1,5 +1,10 @@
+ policy_module(dmesg)
+ 
++gen_require(`
++	type bin_t;
++	class file { map };
++')
++
+ ########################################
+ #
+ # Declarations
+@@ -19,6 +24,8 @@ dontaudit dmesg_t self:capability sys_tty_config;
+ 
+ allow dmesg_t self:process signal_perms;
+ 
++allow dmesg_t bin_t:file { map read execute };
++
+ kernel_read_kernel_sysctls(dmesg_t)
+ kernel_read_ring_buffer(dmesg_t)
+ kernel_clear_ring_buffer(dmesg_t)
+-- 
+2.34.1
+

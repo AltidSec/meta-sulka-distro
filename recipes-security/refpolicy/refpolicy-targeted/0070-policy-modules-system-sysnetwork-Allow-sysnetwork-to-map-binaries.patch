@@ -1,0 +1,30 @@
+From eb1a052206ce3d4e96e3e3436d41127791c5e167 Mon Sep 17 00:00:00 2001
+From: ejaaskel <esa.jaaskela@suomi24.fi>
+Date: Fri, 22 Aug 2025 21:47:25 +0300
+Subject: [PATCH] policy/modules/system/sysnetwork: Allow sysnetwork to map
+ binaries
+
+Allow ifconfig_t process to map bin_t files. Without this, network
+initialization script that is present in the sysvinit systems will fail.
+This patch should not be required for systemd systems, as they do not
+have this init service.
+---
+ policy/modules/system/sysnetwork.te | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/policy/modules/system/sysnetwork.te b/policy/modules/system/sysnetwork.te
+index be98732e6..7611a7fde 100644
+--- a/policy/modules/system/sysnetwork.te
++++ b/policy/modules/system/sysnetwork.te
+@@ -317,6 +317,8 @@ allow ifconfig_t self:netlink_route_socket create_netlink_socket_perms;
+ allow ifconfig_t self:netlink_xfrm_socket create_netlink_socket_perms;
+ allow ifconfig_t self:tcp_socket { create ioctl };
+ 
++allow ifconfig_t bin_t:file { map read execute };
++
+ # Allow "ip netns" to remount /var/run/netns and to mount network namespace files on /var/run/netns/$NSNAME
+ allow ifconfig_t ifconfig_runtime_t:dir mounton;
+ allow ifconfig_t ifconfig_runtime_t:file mounton;
+-- 
+2.34.1
+
