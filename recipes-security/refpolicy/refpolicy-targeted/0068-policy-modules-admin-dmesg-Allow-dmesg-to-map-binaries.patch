@@ -10,6 +10,8 @@ have this init service.
 
 Another alternative is using util-linux-dmesg package instead of the
 Busybox dmesg.
+
+Upstream-Status: Inappropriate [Sulka specific]
 ---
  policy/modules/admin/dmesg.te | 9 +++++++++
  1 file changed, 9 insertions(+)

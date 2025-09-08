@@ -10,6 +10,8 @@ However, despite this deny, the command still seems to be successful.
 
 Add new file configuration for systemd service nftables.service. This
 has the same context as iptables.service.
+
+Upstream-Status: Inappropriate [Sulka specific]
 ---
  policy/modules/system/iptables.fc | 1 +
  policy/modules/system/iptables.te | 7 +++++++

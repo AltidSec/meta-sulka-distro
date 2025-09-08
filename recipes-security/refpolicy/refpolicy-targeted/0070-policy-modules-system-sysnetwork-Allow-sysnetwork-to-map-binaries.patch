@@ -8,6 +8,8 @@ Allow ifconfig_t process to map bin_t files. Without this, network
 initialization script that is present in the sysvinit systems will fail.
 This patch should not be required for systemd systems, as they do not
 have this init service.
+
+Upstream-Status: Inappropriate [Sulka specific]
 ---
  policy/modules/system/sysnetwork.te | 2 ++
  1 file changed, 2 insertions(+)

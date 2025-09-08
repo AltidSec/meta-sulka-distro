@@ -10,6 +10,8 @@ refpolicy. Add sys_admin capability to system_cronjob_t, and allow
 opening and reading sysctl_fs files.
 
 Note that this change is not required if sysstat is not installed.
+
+Upstream-Status: Inappropriate [Sulka specific]
 ---
  policy/modules/services/cron.te | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
