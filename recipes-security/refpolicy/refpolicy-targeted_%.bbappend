@@ -8,3 +8,7 @@ SRC_URI:append = "${@" file://0068-policy-modules-admin-dmesg-Allow-dmesg-to-map
 SRC_URI:append = "${@" file://0069-policy-modules-services-cron-Allow-more-permissions.patch" if d.getVar('SULKA_ENABLE_MONITORING') == "1" else ""}"
 # sysvinit has a boot script that sets up interfaces, this fails with busybox tooling
 SRC_URI:append = "${@" file://0070-policy-modules-system-sysnetwork-Allow-sysnetwork-to-map-binaries.patch" if d.getVar('INIT_MANAGER') == "sysvinit" else ""}"
+# on systemd systems, rsyslog fails if the default non-persistent tmpfs logging location is used
+SRC_URI:append = "${@" file://0071-policy-modules-system-logging-Allow-tmpfs-searches.patch" if d.getVar('INIT_MANAGER') == "systemd" else ""}"
+# agetty on systemd systems attempts to search /dev/mqueue and /var/volatile, resulting in denials
+SRC_URI:append = "${@" file://0072-policy-modules-system-getty-Allow-tmpfs-searches.patch" if d.getVar('INIT_MANAGER') == "systemd" else ""}"

@@ -1,0 +1,29 @@
+From d2bdc4842498a95f4b1aaef0e2b88a20fbf2fb80 Mon Sep 17 00:00:00 2001
+From: ejaaskel <esa.jaaskela@suomi24.fi>
+Date: Wed, 10 Sep 2025 11:51:08 +0300
+Subject: [PATCH] policy/modules/system/getty: Allow tmpfs searches
+
+Allow tmpfs searches for getty_t. agetty seems to perform searches to
+/dev/mqueue and /var/volatile during the login, so allow these actions.
+
+Upstream-Status: Inappropriate [Sulka specific]
+---
+ policy/modules/system/getty.te | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/policy/modules/system/getty.te b/policy/modules/system/getty.te
+index a900226bf..20d86ed4a 100644
+--- a/policy/modules/system/getty.te
++++ b/policy/modules/system/getty.te
+@@ -56,6 +56,8 @@ allow getty_t getty_tmp_t:file manage_file_perms;
+ allow getty_t getty_tmp_t:dir manage_dir_perms;
+ files_tmp_filetrans(getty_t, getty_tmp_t, { file dir })
+ 
++allow getty_t tmpfs_t:dir search;
++
+ kernel_read_kernel_sysctls(getty_t)
+ kernel_read_system_state(getty_t)
+ 
+-- 
+2.34.1
+

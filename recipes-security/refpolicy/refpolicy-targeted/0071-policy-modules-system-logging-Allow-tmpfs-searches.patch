@@ -1,0 +1,31 @@
+From 7db8a8eda55091e0bdeea5980143ec43b7840d02 Mon Sep 17 00:00:00 2001
+From: ejaaskel <esa.jaaskela@suomi24.fi>
+Date: Wed, 10 Sep 2025 09:51:48 +0300
+Subject: [PATCH] policy/modules/system/logging: Allow tmpfs searches
+
+The logging directory on the default build is symlinked to
+/var/volatile, that is a tmpfs mount. Searching that directory results
+in constant failures with rsyslog. Allow syslogd to perform searches on
+temporary file systems to fix this.
+
+Upstream-Status: Inappropriate [Sulka specific]
+---
+ policy/modules/system/logging.te | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/policy/modules/system/logging.te b/policy/modules/system/logging.te
+index eea78ffc5..8179dc0a8 100644
+--- a/policy/modules/system/logging.te
++++ b/policy/modules/system/logging.te
+@@ -440,6 +440,8 @@ manage_files_pattern(syslogd_t, syslogd_var_lib_t, syslogd_var_lib_t)
+ allow syslogd_t syslogd_var_lib_t:file map;
+ files_search_var_lib(syslogd_t)
+ 
++allow syslogd_t tmpfs_t:dir search;
++
+ # manage runtime files
+ allow syslogd_t syslogd_runtime_t:dir create_dir_perms;
+ allow syslogd_t syslogd_runtime_t:sock_file manage_sock_file_perms;
+-- 
+2.34.1
+
