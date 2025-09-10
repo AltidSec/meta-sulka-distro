@@ -6,6 +6,10 @@ Subject: [PATCH] policy/modules/system/getty: Allow tmpfs searches
 Allow tmpfs searches for getty_t. agetty seems to perform searches to
 /dev/mqueue and /var/volatile during the login, so allow these actions.
 
+This seems to be present only in the systemd systems. In sysvinit
+systems /var/volatile is labeled as var_t, not tmpfs_t, and /dev/mqueue
+does not exist.
+
 Upstream-Status: Inappropriate [Sulka specific]
 ---
  policy/modules/system/getty.te | 2 ++
