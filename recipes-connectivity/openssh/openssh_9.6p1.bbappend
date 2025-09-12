@@ -21,3 +21,9 @@ do_install:append:sulka () {
     chmod 600 ${D}${sysconfdir}/ssh/sshd_config
     chmod 600 ${D}${sysconfdir}/ssh/sshd_config_readonly
 }
+
+pkg_postinst_ontarget:${PN}:sulka () {
+    if which setsebool &> /dev/null; then
+        setsebool -P ssh_sysadm_login on
+    fi
+}
