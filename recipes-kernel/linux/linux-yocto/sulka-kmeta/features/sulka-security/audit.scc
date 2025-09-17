@@ -1,5 +1,0 @@
-# SPDX-License-Identifier: MIT
-define KFEATURE_DESCRIPTION "Enable audit support"
-define KFEATURE_COMPATIBILITY all
-
-kconf non-hardware audit.cfg
