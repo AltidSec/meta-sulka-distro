@@ -17,6 +17,9 @@ python check_insecure_image_features () {
         bb.warn("ssh-server-dropbear is in the IMAGE_FEATURES.\n"
                 "The configuration of the dropbear is not hardened.\n"
                 "Please use ssh-server-openssh instead.")
+
+    if d.getVar('SULKA_DEVELOPMENT_MODE') == "1":
+        bb.warn("SULKA_DEVELOPMENT_MODE is enabled. This is not recommended for production builds.")
 }
 
 addhandler check_serviceuser_password
