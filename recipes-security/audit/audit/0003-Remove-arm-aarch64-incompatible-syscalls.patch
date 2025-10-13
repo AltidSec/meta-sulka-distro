@@ -1,0 +1,54 @@
+From 0e0fb0618f0b4953fc3435ede38fdf12f1fe6f2f Mon Sep 17 00:00:00 2001
+From: ejaaskel <esa.jaaskela@suomi24.fi>
+Date: Mon, 13 Oct 2025 09:41:29 +0300
+Subject: [PATCH] Remove arm/aarch64 incompatible syscalls
+
+Remove the arm and aarc64 incompatible syscalls from the STIG rules.
+This allows using STIG ruleset with Arm architectures.
+
+Upstream-Status: Pending
+---
+ rules/30-stig.rules | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/rules/30-stig.rules b/rules/30-stig.rules
+index 49707a3d..35087d6d 100644
+--- a/rules/30-stig.rules
++++ b/rules/30-stig.rules
+@@ -111,17 +111,17 @@
+ ##- Discretionary access control permission modification (unsuccessful
+ ## and successful use of chown/chmod)
+ -a always,exit -F arch=b32 -S chmod,fchmod,fchmodat,fchmodat2,file_setattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+--a always,exit -F arch=b64 -S chmod,fchmod,fchmodat,fchmodat2,file_setattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+--a always,exit -F arch=b32 -S lchown,fchown,chown,fchownat,file_setattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+--a always,exit -F arch=b64 -S chown,fchown,lchown,fchownat,file_setattr -F auid>=1000 -F auid!=unset -F key=perm_mod
++-a always,exit -F arch=b64 -S fchmod,fchmodat,fchmodat2,file_setattr -F auid>=1000 -F auid!=unset -F key=perm_mod
++-a always,exit -F arch=b32 -S lchown,fchown,chown,lchown32,fchown32,chown32,fchownat,file_setattr -F auid>=1000 -F auid!=unset -F key=perm_mod
++-a always,exit -F arch=b64 -S fchown,fchownat,file_setattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+ -a always,exit -F arch=b32 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr,file_setattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+ -a always,exit -F arch=b64 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr,file_setattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+ 
+ ##- Unauthorized access attempts to files (unsuccessful) 
+ -a always,exit -F arch=b32 -S open,creat,truncate,ftruncate,openat,openat2,open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access
+ -a always,exit -F arch=b32 -S open,creat,truncate,ftruncate,openat,openat2,open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access
+--a always,exit -F arch=b64 -S open,truncate,ftruncate,creat,openat,openat2,open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access
+--a always,exit -F arch=b64 -S open,truncate,ftruncate,creat,openat,openat2,open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access
++-a always,exit -F arch=b64 -S truncate,ftruncate,openat,openat2,open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access
++-a always,exit -F arch=b64 -S truncate,ftruncate,openat,openat2,open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access
+ 
+ ##- Use of print command (unsuccessful and successful) 
+ 
+@@ -135,8 +135,8 @@
+ ##- System startup and shutdown (unsuccessful and successful)
+ 
+ ##- Files and programs deleted by the user (successful and unsuccessful)
+--a always,exit -F arch=b32 -S unlink,unlinkat,rename,renameat -F auid>=1000 -F auid!=unset -F key=delete
+--a always,exit -F arch=b64 -S unlink,unlinkat,rename,renameat -F auid>=1000 -F auid!=unset -F key=delete
++-a always,exit -F arch=b32 -S unlink,unlinkat,rename,renameat,renameat2 -F auid>=1000 -F auid!=unset -F key=delete
++-a always,exit -F arch=b64 -S unlinkat,renameat,renameat2 -F auid>=1000 -F auid!=unset -F key=delete
+ 
+ ##- All system administration actions 
+ ##- All security personnel actions
+-- 
+2.34.1
+

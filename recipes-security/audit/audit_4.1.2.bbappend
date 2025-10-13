@@ -5,6 +5,8 @@ SRC_URI:append:sulka = " \
     file://0002-Run-audit-rules.service-after-run-postinsts.service.patch \
 "
 
+SRC_URI:append:aarch64 = " file://0003-Remove-arm-aarch64-incompatible-syscalls.patch "
+
 # Note that if these are changed, the pkg_postinst_ontarget function needs to be
 # revised as it makes changes to 30-stig and 31-privileged rules
 AUDIT_RULES_TO_INSTALL = " \
