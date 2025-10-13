@@ -27,10 +27,10 @@ remove_useradd_backup_files () {
 
 harden_cron_directories () {
   # Set cron files to be readable only by root
-  chmod 600 ${IMAGE_ROOTFS}${sysconfdir}/cron.deny
-  chmod 700 ${IMAGE_ROOTFS}${sysconfdir}/cron.d
-  chmod 700 ${IMAGE_ROOTFS}${sysconfdir}/cron.daily
-  chmod 700 ${IMAGE_ROOTFS}${sysconfdir}/cron.hourly
-  chmod 700 ${IMAGE_ROOTFS}${sysconfdir}/cron.monthly
-  chmod 700 ${IMAGE_ROOTFS}${sysconfdir}/cron.weekly
+  [ -f ${IMAGE_ROOTFS}${sysconfdir}/cron.deny ] && chmod 600 ${IMAGE_ROOTFS}${sysconfdir}/cron.deny || true
+  [ -d ${IMAGE_ROOTFS}${sysconfdir}/cron.d ] && chmod 700 ${IMAGE_ROOTFS}${sysconfdir}/cron.d || true
+  [ -d ${IMAGE_ROOTFS}${sysconfdir}/cron.daily ] && chmod 700 ${IMAGE_ROOTFS}${sysconfdir}/cron.daily || true
+  [ -d ${IMAGE_ROOTFS}${sysconfdir}/cron.hourly ] && chmod 700 ${IMAGE_ROOTFS}${sysconfdir}/cron.hourly || true
+  [ -d ${IMAGE_ROOTFS}${sysconfdir}/cron.monthly ] && chmod 700 ${IMAGE_ROOTFS}${sysconfdir}/cron.monthly || true
+  [ -d ${IMAGE_ROOTFS}${sysconfdir}/cron.weekly ] && chmod 700 ${IMAGE_ROOTFS}${sysconfdir}/cron.weekly || true
 }
