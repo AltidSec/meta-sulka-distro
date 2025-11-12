@@ -14,3 +14,5 @@ SRC_URI:append = "${@" file://0071-policy-modules-system-logging-Allow-tmpfs-sea
 SRC_URI:append = "${@" file://0072-policy-modules-system-getty-Allow-tmpfs-searches.patch" if d.getVar('INIT_MANAGER') == "systemd" else ""}"
 # Allow changing the password during the log-in process
 SRC_URI:append = " file://0073-policy-modules-system-locallogin-Allow-changing-password.patch "
+# auditd needs permissions to create into the /var/run
+SRC_URI:append = " file://0074-policy-modules-system-logging-Allow-auditd-to-create.patch "
