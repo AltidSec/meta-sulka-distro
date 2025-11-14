@@ -16,3 +16,5 @@ SRC_URI:append = "${@" file://0072-policy-modules-system-getty-Allow-tmpfs-searc
 SRC_URI:append = " file://0073-policy-modules-system-locallogin-Allow-changing-password.patch "
 # auditd needs permissions to create into the /var/run
 SRC_URI:append = " file://0074-policy-modules-system-logging-Allow-auditd-to-create.patch "
+# Allow changing the password during SSH log-in process. This is allowed by default only in development mode
+SRC_URI:append = "${@" file://0075-policy-modules-system-ssh-Allow-changing-password.patch" if d.getVar('SULKA_DEVELOPMENT_MODE') == "1" else ""}"
