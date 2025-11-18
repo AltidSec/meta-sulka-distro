@@ -22,8 +22,10 @@ AUDIT_RULES_TO_INSTALL = " \
 "
 
 do_install:append:sulka () {
+    # Remove the default rules from rules.d to have a clean directory
     rm ${D}/etc/audit/rules.d/audit.rules
 
+    # Install desired rules
     for rule in ${AUDIT_RULES_TO_INSTALL}; do
         if [ -f ${S}/rules/${rule} ]; then
             install -m 0640 ${S}/rules/${rule} ${D}/etc/audit/rules.d/
@@ -54,4 +56,7 @@ pkg_postinst_ontarget:${PN}:sulka () {
     # comment them out if they are not in the system
     [ ! -d "/etc/NetworkManager" ] && sed -i 's/^.*\/etc\/NetworkManager.*$/# &/' /etc/audit/rules.d/30-stig.rules
     [ ! -d "/etc/selinux" ]        && sed -i 's/^.*\/etc\/selinux.*$/# &/'        /etc/audit/rules.d/30-stig.rules
+
+    # Generate the audit.rules file
+    /sbin/augenrules
 }
