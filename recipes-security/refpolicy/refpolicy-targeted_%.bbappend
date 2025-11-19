@@ -18,3 +18,5 @@ SRC_URI:append = " file://0073-policy-modules-system-locallogin-Allow-changing-p
 SRC_URI:append = " file://0074-policy-modules-system-logging-Auditd-fixes.patch "
 # Allow changing the password during SSH log-in process. This is allowed by default only in development mode
 SRC_URI:append = "${@" file://0075-policy-modules-system-ssh-Allow-changing-password.patch" if d.getVar('SULKA_DEVELOPMENT_MODE') == "1" else ""}"
+# on systemd systems, systemd-sysctl requires additional permissions during boot
+SRC_URI:append = "${@" file://0076-policy-modules-system-systemd-Allow-sys_resource-for.patch " if d.getVar('INIT_MANAGER') == "systemd" else ""}"
