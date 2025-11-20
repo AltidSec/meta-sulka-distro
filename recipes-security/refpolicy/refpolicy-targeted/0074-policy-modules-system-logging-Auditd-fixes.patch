@@ -6,6 +6,8 @@ Subject: [PATCH] policy/modules/system/logging: Auditd fixes
 Auditctl needs to be able to read and open files with auditd_log_t
 label, so allow that. In addition, auditd needs permissions to create
 into the /var/run labeled directories, so allow it.
+
+Upstream-Status: Inappropriate [Sulka specific]
 ---
  policy/modules/system/logging.te | 1 +
  1 file changed, 1 insertion(+)

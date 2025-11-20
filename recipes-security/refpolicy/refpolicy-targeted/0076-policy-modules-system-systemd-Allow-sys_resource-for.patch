@@ -5,6 +5,8 @@ Subject: [PATCH] policy/modules/system/systemd: Allow sys_resource for sysctl
 
 The sysctl requires sys_resource capabilities during the boot time.
 Loosen up the SELinux policy to allow this.
+
+Upstream-Status: Inappropriate [Sulka specific]
 ---
  policy/modules/system/systemd.te | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
