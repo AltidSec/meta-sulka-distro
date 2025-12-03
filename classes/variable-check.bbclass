@@ -55,3 +55,14 @@ python check_module_signing_keys () {
                      "or generate the keys with generate_ima_evm_modsign_keys.sh script in kas-sulka and set the required\n"
                      "MODSIGN_KEY_DIR and IMA_EVM_ROOT_CA variables.")
 }
+
+addhandler selinux_variables
+selinux_variables[eventmask] = "bb.event.ConfigParsed bb.event.MultiConfigParsed"
+
+python selinux_variables () {
+    first_boot_relabel = (d.getVar('FIRST_BOOT_RELABEL') or '')
+    if first_boot_relabel == '1':
+        bb.fatal("FIRST_BOOT_RELABEL for SELinux has been disabled in Sulka.\n"
+                 "Fixfiles script needed for relabeling relies on bash, which is not included due to its GPLv3 License.\n"
+                 "If you need run-time relabeling, please open an issue at https://codeberg.org/AltidSec/meta-sulka-distro/issues")
+}
