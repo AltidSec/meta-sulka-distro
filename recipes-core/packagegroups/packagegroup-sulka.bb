@@ -11,7 +11,6 @@ PACKAGES += "${PN}-monitoring ${PN}-netfilter-modules"
 # always be installed, with possible exceptions of cronie and
 # dpkg-start-stop.
 RDEPENDS:${PN} = "\
-    cronie \
     dpkg-start-stop \
     nftables \
     nftables-configuration \
