@@ -42,21 +42,27 @@ pkg_postinst_ontarget:${PN}:sulka () {
     # we do not add additional privileged binaries that could be
     # found with filecap search as filecap would be additional
     # dependency
-    find /bin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b32 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' > /etc/audit/rules.d/31-privileged.rules
-    find /sbin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b32 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
-    find /usr/bin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b32 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
-    find /usr/sbin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b32 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
+    if [ -d /etc/audit/rules.d ]; then
+        find /bin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b32 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' > /etc/audit/rules.d/31-privileged.rules
+        find /sbin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b32 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
+        find /usr/bin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b32 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
+        find /usr/sbin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b32 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
 
-    find /bin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b64 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
-    find /sbin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b64 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
-    find /usr/bin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b64 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
-    find /usr/sbin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b64 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
+        find /bin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b64 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
+        find /sbin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b64 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
+        find /usr/bin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b64 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
+        find /usr/sbin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b64 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
+    fi
 
     # NetworkManager and selinux directories don't always exist, so
     # comment them out if they are not in the system
-    [ ! -d "/etc/NetworkManager" ] && sed -i 's/^.*\/etc\/NetworkManager.*$/# &/' /etc/audit/rules.d/30-stig.rules
-    [ ! -d "/etc/selinux" ]        && sed -i 's/^.*\/etc\/selinux.*$/# &/'        /etc/audit/rules.d/30-stig.rules
+    if [ -f /etc/audit/rules.d/30-stig.rules ]; then
+        [ ! -d "/etc/NetworkManager" ] && sed -i 's/^.*\/etc\/NetworkManager.*$/# &/' /etc/audit/rules.d/30-stig.rules
+        [ ! -d "/etc/selinux" ]        && sed -i 's/^.*\/etc\/selinux.*$/# &/'        /etc/audit/rules.d/30-stig.rules
+    fi
 
     # Generate the audit.rules file
-    /sbin/augenrules
+    if [ -x /sbin/augenrules ]; then
+        /sbin/augenrules
+    fi
 }
