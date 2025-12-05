@@ -26,8 +26,6 @@ RDEPENDS:${PN} = "\
 # recommended to go throughthese, understand what they do, and possibly
 # configure or remove them. These are installed by default.
 RDEPENDS:${PN}-monitoring = "\
-    acct \
-    aide \
     auditd \
     sysstat \
 "
