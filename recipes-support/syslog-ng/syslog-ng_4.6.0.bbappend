@@ -1,3 +1,7 @@
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+
+SRC_URI:append = " file://0010-syslog-ng-Disable-xconsole-logging.patch;patchdir=${WORKDIR} "
+
 RDEPENDS:${PN}:remove = "gawk"
 
 do_install:append() {

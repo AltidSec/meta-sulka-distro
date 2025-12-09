@@ -1,0 +1,100 @@
+From c3d749d61ab42cf486515a3bcc7aa09209cf55ba Mon Sep 17 00:00:00 2001
+From: ejaaskel <esa.jaaskela@suomi24.fi>
+Date: Tue, 9 Dec 2025 10:45:15 +0000
+Subject: [PATCH] syslog-ng: Disable xconsole logging
+
+xconsole logging is not really commonly required in embedded systems,
+and enabling it would require modifying the SELinux policy to allow it,
+so disable it.
+
+Upstream-Status: Inappropriate [Sulka specific]
+---
+diff --git a/initscript b/initscript
+index 910030f41d..d2a721f23e 100644
+--- a/initscript
++++ b/initscript
+@@ -13,17 +13,11 @@ test -x "$syslog_ng" || exit 0
+ 
+ PIDFILE=/var/run/syslog-ng/syslog-ng.pid
+ 
+-create_xconsole() {
+-  test -e /dev/xconsole || mknod -m 640 /dev/xconsole p
+-  test -x /sbin/restorecon && /sbin/restorecon /dev/xconsole
+-}
+-
+ RETVAL=0
+ 
+ case "$1" in
+   start)
+     [ "${VERBOSE}" != "no" ] && echo -n "Starting syslog-ng:"
+-    create_xconsole
+     start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $syslog_ng
+     [ "${VERBOSE}" != "no" ] && echo "."
+     ;;
+@@ -46,7 +40,6 @@ case "$1" in
+     done
+     echo ""
+     echo -n "Starting syslog-ng:"
+-    create_xconsole
+     start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $syslog_ng
+     echo "."
+     ;;
+diff --git a/syslog-ng.conf.systemd b/syslog-ng.conf.systemd
+index 851bf252b7..0602fb1d7a 100644
+--- a/syslog-ng.conf.systemd
++++ b/syslog-ng.conf.systemd
+@@ -71,13 +71,6 @@ destination d_console { usertty("root"); };
+ #
+ destination d_console_all { file("/dev/tty10"); };
+ 
+-# The named pipe /dev/xconsole is for the nsole' utility.  To use it,
+-# you must invoke nsole' with the -file' option:
+-#
+-#    $ xconsole -file /dev/xconsole [...]
+-#
+-destination d_xconsole { pipe("/dev/xconsole"); };
+-
+ # Send the messages to an other host
+ #
+ #destination d_net { tcp("127.0.0.1" port(1000) authentication(on) encrypt(on) log_fifo_size(1000)); };
+@@ -151,8 +144,7 @@ log { source(s_src); filter(f_debug); destination(d_debug); };
+ log { source(s_src); filter(f_error); destination(d_error); };
+ log { source(s_src); filter(f_messages); destination(d_messages); };
+ 
+-log { source(s_src); filter(f_console); destination(d_console_all);
+-				    destination(d_xconsole); };
++log { source(s_src); filter(f_console); destination(d_console_all); };
+ log { source(s_src); filter(f_crit); destination(d_console); };
+ 
+ # All messages send to a remote site
+diff --git a/syslog-ng.conf.sysvinit b/syslog-ng.conf.sysvinit
+index 70afd0da84..8cbbf5dbef 100644
+--- a/syslog-ng.conf.sysvinit
++++ b/syslog-ng.conf.sysvinit
+@@ -71,13 +71,6 @@ destination d_console { usertty("root"); };
+ #
+ destination d_console_all { file("/dev/tty10"); };
+ 
+-# The named pipe /dev/xconsole is for the nsole' utility.  To use it,
+-# you must invoke nsole' with the -file' option:
+-#
+-#    $ xconsole -file /dev/xconsole [...]
+-#
+-destination d_xconsole { pipe("/dev/xconsole"); };
+-
+ # Send the messages to an other host
+ #
+ #destination d_net { tcp("127.0.0.1" port(1000) authentication(on) encrypt(on) log_fifo_size(1000)); };
+@@ -151,8 +144,7 @@ log { source(s_src); filter(f_debug); destination(d_debug); };
+ log { source(s_src); filter(f_error); destination(d_error); };
+ log { source(s_src); filter(f_messages); destination(d_messages); };
+ 
+-log { source(s_src); filter(f_console); destination(d_console_all);
+-				    destination(d_xconsole); };
++log { source(s_src); filter(f_console); destination(d_console_all); };
+ log { source(s_src); filter(f_crit); destination(d_console); };
+ 
+ # All messages send to a remote site
+-- 
+2.34.1
+
