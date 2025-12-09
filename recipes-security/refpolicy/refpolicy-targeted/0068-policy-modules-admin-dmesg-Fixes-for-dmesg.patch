@@ -1,15 +1,12 @@
 From 3fc953510ab5f0f48596ab2abc2d0ecc1fb136cd Mon Sep 17 00:00:00 2001
 From: ejaaskel <esa.jaaskela@suomi24.fi>
-Date: Fri, 22 Aug 2025 13:39:43 +0300
-Subject: [PATCH] policy/modules/admin/dmesg: Allow dmesg to map binaries
+Date: Tue, 9 Dec 2025 14:38:23 +0300
+Subject: [PATCH] policy/modules/admin/dmesg: Fixes for dmesg
 
-Allow dmesg_t process to map dmesg_t to map bin_t files. Without this,
-dmesg rotation script that is present in the sysvinit systems will fail.
-This patch should not be required for systemd systems, as they do not
-have this init service.
-
-Another alternative is using util-linux-dmesg package instead of the
-Busybox dmesg.
+Loosen up some policies for dmesg_t to allow normal operation of the
+dmesg during boot. It seems like sysvinit has an initialization script
+that calls dmesg that requires these permissions, as they are not
+required anymore post-boot. 
 
 Upstream-Status: Inappropriate [Sulka specific]
 ---
@@ -31,11 +28,12 @@ index f1da315a9..d62656a93 100644
  ########################################
  #
  # Declarations
-@@ -19,6 +24,8 @@ dontaudit dmesg_t self:capability sys_tty_config;
+@@ -19,6 +24,9 @@ dontaudit dmesg_t self:capability sys_tty_config;
  
  allow dmesg_t self:process signal_perms;
  
 +allow dmesg_t bin_t:file { map read execute };
++allow dmesg_t proc_t:file { read open getattr };
 +
  kernel_read_kernel_sysctls(dmesg_t)
  kernel_read_ring_buffer(dmesg_t)

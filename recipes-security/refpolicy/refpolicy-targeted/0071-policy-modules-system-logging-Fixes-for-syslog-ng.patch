@@ -1,15 +1,12 @@
 From 7db8a8eda55091e0bdeea5980143ec43b7840d02 Mon Sep 17 00:00:00 2001
 From: ejaaskel <esa.jaaskela@suomi24.fi>
-Date: Wed, 10 Sep 2025 09:51:48 +0300
-Subject: [PATCH] policy/modules/system/logging: Allow tmpfs searches
+Date: Tue, 9 Dec 2025 14:34:43 +0300
+Subject: [PATCH] policy/modules/system/logging: Fixes for syslog-ng
 
-The logging directory on the default build is symlinked to
-/var/volatile, that is a tmpfs mount. Searching that directory results
-in constant failures with rsyslog. Allow syslogd to perform searches on
-temporary file systems to fix this.
-
-This seems to be present only in the systemd systems. In sysvinit
-systems /var/volatile is labeled as var_t, not tmpfs_t
+Fix SELinux failures for syslog-ng. This patch should allow most of the
+requested things, with the exception of network connection, which should
+be manually enabled if remote logging is enabled, and writing to root_t,
+which sounds like it should not be allowed in the first place.
 
 Upstream-Status: Inappropriate [Sulka specific]
 ---
@@ -20,10 +17,12 @@ diff --git a/policy/modules/system/logging.te b/policy/modules/system/logging.te
 index eea78ffc5..8179dc0a8 100644
 --- a/policy/modules/system/logging.te
 +++ b/policy/modules/system/logging.te
-@@ -440,6 +440,8 @@ manage_files_pattern(syslogd_t, syslogd_var_lib_t, syslogd_var_lib_t)
+@@ -440,6 +440,10 @@ manage_files_pattern(syslogd_t, syslogd_var_lib_t, syslogd_var_lib_t)
  allow syslogd_t syslogd_var_lib_t:file map;
  files_search_var_lib(syslogd_t)
- 
+
++allow syslogd_t device_t:file { append create getattr open setattr };
++allow syslogd_t etc_t:dir watch;
 +allow syslogd_t tmpfs_t:dir search;
 +
  # manage runtime files
