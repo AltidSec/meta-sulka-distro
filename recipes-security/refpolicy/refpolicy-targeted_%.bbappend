@@ -20,3 +20,7 @@ SRC_URI:append:sulka = " file://0074-policy-modules-system-logging-Auditd-fixes.
 SRC_URI:append:sulka = "${@" file://0075-policy-modules-system-ssh-Allow-changing-password.patch" if d.getVar('SULKA_DEVELOPMENT_MODE') == "1" else ""}"
 # on systemd systems, systemd-sysctl requires additional permissions during boot
 SRC_URI:append:sulka = "${@" file://0076-policy-modules-system-systemd-Allow-sys_resource-for.patch " if d.getVar('INIT_MANAGER') == "systemd" else ""}"
+# If SSH server is installed, ssh_sysadm_login tunable should be enabled
+SRC_URI:append:sulka = "${@" file://0077-policy-modules-services-ssh-Allow-ssh_sysadm_login.patch" if bb.utils.contains('IMAGE_FEATURES', 'ssh-server-openssh', True, False, d) else ""}"
+# With read-only-rootfs ssh_keygen needs access /run (or /var/run)
+SRC_URI:append:sulka = "${@" file://0078-policy-modules-services-ssh-RO-FS-SSH-Fixes.patch" if bb.utils.contains('EXTRA_IMAGE_FEATURES', 'read-only-rootfs', True, False, d) else ""}"

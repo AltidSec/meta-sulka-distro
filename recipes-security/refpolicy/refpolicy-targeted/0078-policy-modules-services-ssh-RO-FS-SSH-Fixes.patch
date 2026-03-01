@@ -1,0 +1,38 @@
+From 747f9b6b678f8e4dc6c8db2f4c4f5b9880879690 Mon Sep 17 00:00:00 2001
+From: ejaaskel <esa.jaaskela@suomi24.fi>
+Date: Tue, 3 Mar 2026 18:45:54 +0000
+Subject: [PATCH] policy/modules/services/ssh: RO FS SSH Fixes
+
+Read-only root file system related fixes for SSH. In short, sshkeygen
+cannot write to the usual location /etc if the rootfs is read only, and
+tries to write host keys to /var/run instead. The refpolicy does not
+take this into account, so some additional rules have to be defined.
+Similarly, SSH command itself needs to access these runtime directories
+---
+ policy/modules/services/ssh.te | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/policy/modules/services/ssh.te b/policy/modules/services/ssh.te
+--- a/policy/modules/services/ssh.te
++++ b/policy/modules/services/ssh.te
+@@ -338,6 +338,17 @@ allow ssh_keygen_t self:unix_stream_socket create_stream_socket_perms;
+
+ allow ssh_keygen_t sshd_key_t:file manage_file_perms;
+ files_etc_filetrans(ssh_keygen_t, sshd_key_t, file)
++# Read-only filesystem fixes for ssh keygen on systemd (need to write to /var/run)
++allow ssh_keygen_t initrc_runtime_t:dir { add_name search write };
++allow ssh_keygen_t initrc_runtime_t:file { create getattr open write };
++# Read-only filesystem fixes for ssh keygen on sysvinit systems
++files_runtime_filetrans(ssh_keygen_t, sshd_key_t, file)
++# Read-only filesystem fixes for ssh on systemd (need to search /var/run)
++allow sshd_t initrc_runtime_t:dir search;
++gen_require(`
++	type unconfined_t;
++')
++allow sshd_t unconfined_t:key { link search };
+
+ kernel_read_kernel_sysctls(ssh_keygen_t)
+ kernel_dontaudit_getattr_proc(ssh_keygen_t)
+ kernel_dontaudit_read_system_state(ssh_keygen_t)
+--
+2.34.1
