@@ -2,10 +2,12 @@ FILESEXTRAPATHS:prepend:sulka := "${THISDIR}/${PN}:"
 
 SRC_URI:append:sulka = " \
     file://55-sulka.rules \
-    file://0002-Run-audit-rules.service-after-run-postinsts.service.patch \
+    file://0004-Load-rules-with-auditctl-before-starting-auditd.patch \
 "
 
 SRC_URI:append:aarch64 = " file://0003-Remove-arm-aarch64-incompatible-syscalls.patch "
+
+SYSTEMD_SERVICE:auditd = "auditd.service"
 
 # Note that if these are changed, the pkg_postinst_ontarget function needs to be
 # revised as it makes changes to 30-stig and 31-privileged rules
@@ -24,7 +26,11 @@ AUDIT_RULES_TO_INSTALL = " \
 do_install:append:sulka () {
     # Remove the default rules from rules.d to have a clean directory
     rm ${D}/etc/audit/rules.d/audit.rules
+    rm ${D}/etc/audit/audit.rules
 
+    if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
+        rm ${D}/${systemd_system_unitdir}/audit-rules.service
+    fi
     # Install desired rules
     for rule in ${AUDIT_RULES_TO_INSTALL}; do
         if [ -f ${S}/rules/${rule} ]; then
@@ -35,34 +41,9 @@ do_install:append:sulka () {
             bbfatal "Could not find rule ${rule}"
         fi
     done
-}
 
-pkg_postinst_ontarget:${PN}:sulka () {
-    # Add all the setuid binaries to 31-privileged.rules. Note that
-    # we do not add additional privileged binaries that could be
-    # found with filecap search as filecap would be additional
-    # dependency
-    if [ -d /etc/audit/rules.d ]; then
-        find /bin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b32 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' > /etc/audit/rules.d/31-privileged.rules
-        find /sbin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b32 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
-        find /usr/bin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b32 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
-        find /usr/sbin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b32 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
-
-        find /bin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b64 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
-        find /sbin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b64 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
-        find /usr/bin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b64 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
-        find /usr/sbin -type f -perm -04000 2>/dev/null | awk '{ printf "-a always,exit -F arch=b64 -F path=%s -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged\n", $1 }' >> /etc/audit/rules.d/31-privileged.rules
-    fi
-
-    # NetworkManager and selinux directories don't always exist, so
-    # comment them out if they are not in the system
-    if [ -f /etc/audit/rules.d/30-stig.rules ]; then
-        [ ! -d "/etc/NetworkManager" ] && sed -i 's/^.*\/etc\/NetworkManager.*$/# &/' /etc/audit/rules.d/30-stig.rules
-        [ ! -d "/etc/selinux" ]        && sed -i 's/^.*\/etc\/selinux.*$/# &/'        /etc/audit/rules.d/30-stig.rules
-    fi
-
-    # Generate the audit.rules file
-    if [ -x /sbin/augenrules ]; then
-        /sbin/augenrules
+    # Finalize rule is usually commented out, uncomment it
+    if [ -f ${D}/etc/audit/rules.d/99-finalize.rules ]; then
+        sed -i '/^#.*-e 2/s/^#//' ${D}/etc/audit/rules.d/99-finalize.rules
     fi
 }

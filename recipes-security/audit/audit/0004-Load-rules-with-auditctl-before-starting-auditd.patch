@@ -1,0 +1,28 @@
+From 6d857b6564cea3d8e4abbe7a1007ed946f7d09a2 Mon Sep 17 00:00:00 2001
+From: ejaaskel <esa.jaaskela@suomi24.fi>
+Date: Sat, 7 Mar 2026 13:19:00 +0000
+Subject: [PATCH] Load rules with auditctl before starting auditd
+
+Sulka generates the audit rules during the build, and augenrules is not
+usable with read-only rootfs. Therefore, the augenrules based rule
+loading is disabled. To load the rules during the boot, patch the auditd
+service to load the rules with auditctl.
+---
+ init.d/auditd.service.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/init.d/auditd.service.in b/init.d/auditd.service.in
+index faeeea51..039363c0 100644
+--- a/init.d/auditd.service.in
++++ b/init.d/auditd.service.in
+@@ -31,6 +31,7 @@ Documentation=man:auditd(8) https://github.com/linux-audit/audit-documentation
+ [Service]
+ Type=forking
+ PIDFile=@runstatedir@/audit/auditd.pid
++ExecStartPre=@sbindir@/auditctl -R /etc/audit/audit.rules
+ ExecStart=@sbindir@/auditd
+ Restart=on-failure
+ ## Do not restart for intentional exits. See EXIT CODES section in auditd(8).
+-- 
+2.34.1
+
