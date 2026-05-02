@@ -35,8 +35,8 @@ do_install:append:sulka () {
     for rule in ${AUDIT_RULES_TO_INSTALL}; do
         if [ -f ${S}/rules/${rule} ]; then
             install -m 0640 ${S}/rules/${rule} ${D}/etc/audit/rules.d/
-        elif [ -f ${WORKDIR}/${rule} ]; then
-            install -m 0640 ${WORKDIR}/${rule} ${D}/etc/audit/rules.d/
+        elif [ -f ${UNPACKDIR}/${rule} ]; then
+            install -m 0640 ${UNPACKDIR}/${rule} ${D}/etc/audit/rules.d/
         else
             bbfatal "Could not find rule ${rule}"
         fi

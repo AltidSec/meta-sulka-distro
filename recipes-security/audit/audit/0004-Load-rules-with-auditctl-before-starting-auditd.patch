@@ -7,6 +7,8 @@ Sulka generates the audit rules during the build, and augenrules is not
 usable with read-only rootfs. Therefore, the augenrules based rule
 loading is disabled. To load the rules during the boot, patch the auditd
 service to load the rules with auditctl.
+
+Upstream-Status: Pending
 ---
  init.d/auditd.service.in | 1 +
  1 file changed, 1 insertion(+)
