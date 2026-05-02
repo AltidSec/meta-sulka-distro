@@ -1,4 +1,4 @@
-From 7db8a8eda55091e0bdeea5980143ec43b7840d02 Mon Sep 17 00:00:00 2001
+From 82d3c6f814f97a1bdfcb6008cfde91365925268a Mon Sep 17 00:00:00 2001
 From: ejaaskel <esa.jaaskela@suomi24.fi>
 Date: Tue, 9 Dec 2025 14:34:43 +0300
 Subject: [PATCH] policy/modules/system/logging: Fixes for syslog-ng
@@ -10,17 +10,17 @@ which sounds like it should not be allowed in the first place.
 
 Upstream-Status: Inappropriate [Sulka specific]
 ---
- policy/modules/system/logging.te | 2 ++
- 1 file changed, 2 insertions(+)
+ policy/modules/system/logging.te | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/policy/modules/system/logging.te b/policy/modules/system/logging.te
-index eea78ffc5..8179dc0a8 100644
+index 5fa90355f..12fefffc9 100644
 --- a/policy/modules/system/logging.te
 +++ b/policy/modules/system/logging.te
-@@ -440,6 +440,10 @@ manage_files_pattern(syslogd_t, syslogd_var_lib_t, syslogd_var_lib_t)
+@@ -456,6 +456,10 @@ manage_files_pattern(syslogd_t, syslogd_var_lib_t, syslogd_var_lib_t)
  allow syslogd_t syslogd_var_lib_t:file map;
  files_search_var_lib(syslogd_t)
-
+ 
 +allow syslogd_t device_t:file { append create getattr open setattr };
 +allow syslogd_t etc_t:dir watch;
 +allow syslogd_t tmpfs_t:dir search;
@@ -28,6 +28,3 @@ index eea78ffc5..8179dc0a8 100644
  # manage runtime files
  allow syslogd_t syslogd_runtime_t:dir create_dir_perms;
  allow syslogd_t syslogd_runtime_t:sock_file manage_sock_file_perms;
--- 
-2.34.1
-

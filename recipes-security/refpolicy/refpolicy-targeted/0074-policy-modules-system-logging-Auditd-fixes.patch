@@ -1,4 +1,4 @@
-From 52e3e529077a634f6f184cfc992c1dff061f56fe Mon Sep 17 00:00:00 2001
+From 509cf0a17441e4e50fbb87133e4c7a89c99af76f Mon Sep 17 00:00:00 2001
 From: ejaaskel <esa.jaaskela@suomi24.fi>
 Date: Wed, 12 Nov 2025 13:43:48 +0200
 Subject: [PATCH] policy/modules/system/logging: Auditd fixes
@@ -9,30 +9,27 @@ into the /var/run labeled directories, so allow it.
 
 Upstream-Status: Inappropriate [Sulka specific]
 ---
- policy/modules/system/logging.te | 1 +
- 1 file changed, 1 insertion(+)
+ policy/modules/system/logging.te | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/policy/modules/system/logging.te b/policy/modules/system/logging.te
-index 1feb3271b..38ad8372c 100644
+index 12fefffc9..112e5fce8 100644
 --- a/policy/modules/system/logging.te
 +++ b/policy/modules/system/logging.te
-@@ -122,6 +122,8 @@ allow auditctl_t self:netlink_audit_socket nlmsg_readpriv;
+@@ -125,6 +125,8 @@ allow auditctl_t auditd_log_t:file read_file_perms;
  read_files_pattern(auditctl_t, auditd_etc_t, auditd_etc_t)
  allow auditctl_t auditd_etc_t:dir list_dir_perms;
  allow auditctl_t var_log_t:lnk_file read_lnk_file_perms;
 +allow auditctl_t auditd_log_t:dir read;
 +allow auditctl_t auditd_log_t:file { read open };
  dontaudit auditctl_t auditd_etc_t:file map;
-
+ 
  corecmd_search_bin(auditctl_t)
-@@ -184,6 +186,7 @@ allow auditd_t auditd_log_t:dir setattr;
+@@ -187,6 +189,7 @@ allow auditd_t auditd_log_t:file { append_file_perms create_file_perms link read
  manage_lnk_files_pattern(auditd_t, auditd_log_t, auditd_log_t)
  allow auditd_t var_log_t:lnk_file read_lnk_file_perms;
  allow auditd_t var_log_t:dir search_dir_perms;
 +allow auditd_t var_run_t:dir create;
  
+ manage_dirs_pattern(auditd_t, auditd_runtime_t, auditd_runtime_t)
  manage_files_pattern(auditd_t, auditd_runtime_t, auditd_runtime_t)
- manage_sock_files_pattern(auditd_t, auditd_runtime_t, auditd_runtime_t)
--- 
-2.34.1
-

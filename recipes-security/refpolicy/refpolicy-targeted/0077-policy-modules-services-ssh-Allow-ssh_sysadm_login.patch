@@ -11,6 +11,8 @@ following error can be seen when using SSH command:
 From the audit logs following issue can be seen:
 
 avc:  denied  { transition } for  pid=462 comm="sshd" path="/bin/bash.bash" dev="vda" ino=16 scontext=system_u:system_r:sshd_t:s0 tcontext=unconfined_u:unconfined_r:unconfined_t:s0 tclass=process permissive=0
+
+Upstream-Status: Inappropriate [Sulka specific]
 ---
  policy/modules/services/ssh.te | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)

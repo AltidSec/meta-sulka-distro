@@ -1,4 +1,4 @@
-From 14cb333d989bca651e7a3896f4d0b0247b105cc1 Mon Sep 17 00:00:00 2001
+From 9fac9942133e84f7ddd887fe6d1785b3cfd64e2a Mon Sep 17 00:00:00 2001
 From: ejaaskel <esa.jaaskela@suomi24.fi>
 Date: Fri, 22 Aug 2025 13:53:21 +0300
 Subject: [PATCH] policy/modules/services/cron: Allow more permissions for
@@ -17,7 +17,7 @@ Upstream-Status: Inappropriate [Sulka specific]
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/policy/modules/services/cron.te b/policy/modules/services/cron.te
-index 9b81dac71..76b1232f8 100644
+index cb8e421bf..e93f15a4b 100644
 --- a/policy/modules/services/cron.te
 +++ b/policy/modules/services/cron.te
 @@ -442,12 +442,14 @@ optional_policy(`
@@ -36,6 +36,3 @@ index 9b81dac71..76b1232f8 100644
  allow system_cronjob_t cron_log_t:file manage_file_perms;
  logging_log_filetrans(system_cronjob_t, cron_log_t, file)
  
--- 
-2.34.1
-

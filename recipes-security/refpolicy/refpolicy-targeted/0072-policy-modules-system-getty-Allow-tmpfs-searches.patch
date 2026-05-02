@@ -1,4 +1,4 @@
-From d2bdc4842498a95f4b1aaef0e2b88a20fbf2fb80 Mon Sep 17 00:00:00 2001
+From cfb8c20cc1962436f2736999dc7fd21c25ebda35 Mon Sep 17 00:00:00 2001
 From: ejaaskel <esa.jaaskela@suomi24.fi>
 Date: Wed, 10 Sep 2025 11:51:08 +0300
 Subject: [PATCH] policy/modules/system/getty: Allow tmpfs searches
@@ -16,7 +16,7 @@ Upstream-Status: Inappropriate [Sulka specific]
  1 file changed, 2 insertions(+)
 
 diff --git a/policy/modules/system/getty.te b/policy/modules/system/getty.te
-index a900226bf..20d86ed4a 100644
+index 48a29461a..b9cb2f417 100644
 --- a/policy/modules/system/getty.te
 +++ b/policy/modules/system/getty.te
 @@ -56,6 +56,8 @@ allow getty_t getty_tmp_t:file manage_file_perms;
@@ -28,6 +28,3 @@ index a900226bf..20d86ed4a 100644
  kernel_read_kernel_sysctls(getty_t)
  kernel_read_system_state(getty_t)
  
--- 
-2.34.1
-
