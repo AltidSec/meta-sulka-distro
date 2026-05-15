@@ -1,6 +1,6 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-SRC_URI:append = " file://0010-syslog-ng-Disable-xconsole-logging.patch;patchdir=${WORKDIR} "
+SRC_URI:append = " file://0010-syslog-ng-Disable-xconsole-logging.patch;patchdir=${UNPACKDIR} "
 
 RDEPENDS:${PN}:remove = "gawk"
 
