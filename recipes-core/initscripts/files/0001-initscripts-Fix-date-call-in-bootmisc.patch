@@ -1,0 +1,33 @@
+From ee3f24f80b01f08e28eafb1601ff4a70fb3823f5 Mon Sep 17 00:00:00 2001
+From: ejaaskel <esa.jaaskela@suomi24.fi>
+Date: Fri, 15 May 2026 22:12:38 +0300
+Subject: [PATCH] initscripts: Fix date call in bootmisc
+
+Fix the date call in bootmisc so that it works as expected with
+uutils-coreutils. The issue is with the time set accepting only a
+certain date format, and the requirement for -s flag when setting date.
+
+Upstream-Status: Inappropriate [Sulka specific]
+---
+ bootmisc.sh | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/bootmisc.sh b/bootmisc.sh
+index 6068a8c..f3aeca2 100755
+--- a/bootmisc.sh
++++ b/bootmisc.sh
+@@ -76,12 +76,8 @@ then
+ 	SYSTEMDATE=`date -u +%4Y%2m%2d%2H%2M%2S`
+ 	read TIMESTAMP < "$TIMESTAMP_FILE"
+ 	if [ ${TIMESTAMP} -gt $SYSTEMDATE ]; then
+-		# format the timestamp as date expects it (2m2d2H2M4Y.2S)
+-		TS_YR=${TIMESTAMP%??????????}
+-		TS_SEC=${TIMESTAMP#????????????}
+-		TS_FIRST12=${TIMESTAMP%??}
+-		TS_MIDDLE8=${TS_FIRST12#????}
+-		date -u ${TS_MIDDLE8}${TS_YR}.${TS_SEC}
++		# Format the timestamp as YYYY-mm-dd HH:MM:SSZ
++		date -s "$(cat /etc/timestamp | sed 's/\(....\)\(..\)\(..\)\(..\)\(..\)\(..\)/\1-\2-\3 \4:\5:\6Z/')"
+ 		test -x /etc/init.d/hwclock.sh && /etc/init.d/hwclock.sh stop
+ 	fi
+ fi
