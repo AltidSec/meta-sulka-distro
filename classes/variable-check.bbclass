@@ -26,9 +26,15 @@ addhandler check_serviceuser_password
 check_serviceuser_password[eventmask] = "bb.event.ConfigParsed bb.event.MultiConfigParsed"
 
 python check_serviceuser_password () {
+    import re
     serviceuser_password = (d.getVar('SULKA_SERVICEUSER_PASSWORD') or '')
     if serviceuser_password == '':
         bb.note("SULKA_SERVICEUSER_PASSWORD is not set, login user will not be created")
+    # Check that all the dollar signs are preceded with escape symbol \
+    elif re.search(r'(?<!\\)\$', serviceuser_password):
+        bb.fatal("SULKA_SERVICEUSER_PASSWORD is set but contains unescaped dollar signs.\n"
+                 "All dollar signs in the password hash must be escaped with backslashes.\n"
+                 "Example: \\$y\\$j75\\$3fiNBCrfz.RN8NsLpBO5m1\\$WCX/KI3Kj9CLUgVZy1/ADEj8qnvlMzywGp5NcYTrx3A")
 }
 
 addhandler check_module_signing_keys
