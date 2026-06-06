@@ -1,16 +1,25 @@
 From a59d5c8b46291c24de1302dcdea2c1b3add8497c Mon Sep 17 00:00:00 2001
 From: ejaaskel <esa.jaaskela@suomi24.fi>
 Date: Tue, 3 Mar 2026 18:44:23 +0000
-Subject: [PATCH 1/2] policy/modules/services/ssh: Allow ssh_sysadm_login
+Subject: [PATCH 1/2] policy/modules/services/ssh: Fixes for ssh
 
-Without ssh_sysadm_login tunable the SSH logins seem to fail. The
-following error can be seen when using SSH command:
+Without ssh_sysadm_login tunable the SSH logins seem to fail, so enable
+the tunable by default. The following error can be seen when using SSH
+command if the tunable is set to false:
 
 /bin/sh: Permission denied
 
 From the audit logs following issue can be seen:
 
 avc:  denied  { transition } for  pid=462 comm="sshd" path="/bin/bash.bash" dev="vda" ino=16 scontext=system_u:system_r:sshd_t:s0 tcontext=unconfined_u:unconfined_r:unconfined_t:s0 tclass=process permissive=0
+
+In addition, after updating to Wrynose, sshd_t seems to require
+fs_t:filesystem getattr permission. This is possibly related to IPC
+mechanism between pam_systemd.so and systemd-logind changing from D-Bus
+to varlink. Without this addition, the following error can be seen in
+the logs:
+
+sshd-session[313]: pam_systemd(sshd:session): Failed to issue io.systemd.Login.CreateSession varlink call: Permission denied
 
 Upstream-Status: Inappropriate [Sulka specific]
 ---
@@ -30,6 +39,14 @@ index 8c9e61901..818be318e 100644
  
  ## <desc>
  ## <p>
+@@ -292,6 +302,7 @@ ifdef(`init_systemd',`
+ 	init_stream_connect(sshd_t)
+ 	init_rw_stream_sockets(sshd_t)
+ 	systemd_write_inherited_logind_sessions_pipes(sshd_t)
++	allow sshd_t fs_t:filesystem getattr;
+ ')
+
+ tunable_policy(`ssh_sysadm_login',`
 -- 
 2.34.1
 

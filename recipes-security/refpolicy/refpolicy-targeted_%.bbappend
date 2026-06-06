@@ -19,6 +19,6 @@ SRC_URI:append:sulka = " file://0074-policy-modules-system-logging-Auditd-fixes.
 # Allow changing the password during SSH log-in process. This is allowed by default only in development mode
 SRC_URI:append:sulka = "${@" file://0075-policy-modules-system-ssh-Allow-changing-password.patch" if d.getVar('SULKA_DEVELOPMENT_MODE') == "1" else ""}"
 # If SSH server is installed, ssh_sysadm_login tunable should be enabled
-SRC_URI:append:sulka = "${@" file://0077-policy-modules-services-ssh-Allow-ssh_sysadm_login.patch" if bb.utils.contains('IMAGE_FEATURES', 'ssh-server-openssh', True, False, d) else ""}"
+SRC_URI:append:sulka = "${@" file://0077-policy-modules-services-ssh-Fixes-for-ssh.patch" if bb.utils.contains('IMAGE_FEATURES', 'ssh-server-openssh', True, False, d) else ""}"
 # With read-only-rootfs ssh_keygen needs access /run (or /var/run)
 SRC_URI:append:sulka = "${@" file://0078-policy-modules-services-ssh-RO-FS-SSH-Fixes.patch" if bb.utils.contains('EXTRA_IMAGE_FEATURES', 'read-only-rootfs', True, False, d) else ""}"
