@@ -36,7 +36,3 @@ RDEPENDS:${PN}-netfilter-modules = "\
     kernel-module-nft-limit \
     kernel-module-nft-log \
 "
-
-
-
-
