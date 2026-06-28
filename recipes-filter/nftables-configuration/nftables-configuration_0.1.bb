@@ -11,6 +11,8 @@ SRC_URI = " \
     file://nftables.service \
 "
 
+S = "${UNPACKDIR}"
+
 RDEPENDS:${PN} = "nftables"
 
 inherit update-rc.d systemd
@@ -22,18 +24,18 @@ SULKA_NFTABLES_CONF ??= "nftables-drop-everything.conf"
 
 do_install() {
     install -d ${D}/${sysconfdir}
-    install -m 644 ${UNPACKDIR}/${SULKA_NFTABLES_CONF} ${D}${sysconfdir}/nftables.conf
+    install -m 644 ${S}/${SULKA_NFTABLES_CONF} ${D}${sysconfdir}/nftables.conf
 
     if ${@bb.utils.contains('DISTRO_FEATURES','sysvinit','true','false',d)}; then
         install -d ${D}/${sysconfdir}/init.d
 
-        install -m 755 ${UNPACKDIR}/nftables.sh ${D}/${sysconfdir}/init.d/nftables
+        install -m 755 ${S}/nftables.sh ${D}/${sysconfdir}/init.d/nftables
     fi
 
     if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
         install -d ${D}/${systemd_unitdir}/system
 
-        install -m 0644 ${UNPACKDIR}/nftables.service ${D}${systemd_unitdir}/system
+        install -m 0644 ${S}/nftables.service ${D}${systemd_unitdir}/system
     fi
 }
 
