@@ -6,6 +6,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 SRC_URI = "file://restorecon-post-mount.sh"
 
+S = "${UNPACKDIR}"
+
 inherit update-rc.d
 
 do_configure[noexec] = "1"
@@ -16,7 +18,7 @@ RESTORECON_NONRECURSIVE_PATHS ?= ""
 
 do_install() {
     install -d ${D}${sysconfdir}/init.d
-    install -m 755 ${UNPACKDIR}/restorecon-post-mount.sh ${D}${sysconfdir}/init.d/0restorecon-post-mount
+    install -m 755 ${S}/restorecon-post-mount.sh ${D}${sysconfdir}/init.d/0restorecon-post-mount
     sed -i 's|@RESTORECON_RECURSIVE_PATHS@|${RESTORECON_RECURSIVE_PATHS}|g' ${D}${sysconfdir}/init.d/0restorecon-post-mount
     sed -i 's|@RESTORECON_NONRECURSIVE_PATHS@|${RESTORECON_NONRECURSIVE_PATHS}|g' ${D}${sysconfdir}/init.d/0restorecon-post-mount
 }
