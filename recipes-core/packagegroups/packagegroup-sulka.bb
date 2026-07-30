@@ -8,9 +8,9 @@ inherit packagegroup
 PACKAGES += "${PN}-monitoring ${PN}-netfilter-modules"
 
 # These are the basic packages used for system hardening. These should
-# always be installed, with possible exceptions of cronie and
-# dpkg-start-stop.
+# always be installed, with possible exception of dpkg-start-stop.
 RDEPENDS:${PN} = "\
+    auditd \
     dpkg-start-stop \
     nftables \
     nftables-configuration \
@@ -26,7 +26,6 @@ RDEPENDS:${PN} = "\
 # recommended to go throughthese, understand what they do, and possibly
 # configure or remove them. These are installed by default.
 RDEPENDS:${PN}-monitoring = "\
-    auditd \
     sysstat \
 "
 
