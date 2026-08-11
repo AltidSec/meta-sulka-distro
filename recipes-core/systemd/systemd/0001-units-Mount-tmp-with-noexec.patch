@@ -1,0 +1,29 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: ejaaskel <esa.jaaskela@suomi24.fi>
+Date: Fri, 7 Aug 2026 17:34:21 +0300
+Subject: [PATCH] units: Mount /tmp with noexec
+
+/tmp is world-writable and is a common staging area for dropped
+payloads. Mounting it with noexec prevents executing binaries directly
+from /tmp, complementing the nosuid and nodev options systemd already
+sets.
+
+Note that this may break software that extracts helper binaries or
+compiles into /tmp, and scripts invoked as /tmp/script.sh. Such software
+needs to use a different directory, or the option has to be dropped.
+
+Upstream-Status: Inappropriate [Sulka specific]
+---
+ units/tmp.mount | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/units/tmp.mount b/units/tmp.mount
+index 9259981..92ed566 100644
+--- a/units/tmp.mount
++++ b/units/tmp.mount
+@@ -22,4 +22,4 @@ After=swap.target
+ What=tmpfs
+ Where=/tmp
+ Type=tmpfs
+-Options=mode=1777,strictatime,nosuid,nodev,size=50%%,nr_inodes=1m
++Options=mode=1777,strictatime,nosuid,nodev,noexec,size=50%%,nr_inodes=1m
