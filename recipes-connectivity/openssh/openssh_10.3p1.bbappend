@@ -1,8 +1,8 @@
 # This should be identical to the main recipe, except that shell has been changed to nologin
-USERADD_PARAM:${PN}-sshd:sulka = "--system --no-create-home --home-dir /var/run/sshd --shell /sbin/nologin --user-group sshd"
+USERADD_PARAM:${PN}-sshd:sulka-hardening = "--system --no-create-home --home-dir /var/run/sshd --shell /sbin/nologin --user-group sshd"
 
 # Bulk of these values originate from meta-security/meta-hardening
-do_install:append:sulka () {
+do_install:append:sulka-hardening () {
     for f in ${D}${sysconfdir}/ssh/sshd_config ${D}${sysconfdir}/ssh/sshd_config_readonly; do
         sed -i -e 's:#AllowTcpForwarding yes:AllowTcpForwarding no:' $f
         sed -i -e 's:ClientAliveCountMax 4:ClientAliveCountMax 2:' $f

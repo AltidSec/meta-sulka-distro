@@ -1,7 +1,7 @@
-SRC_URI:append:sulka = " file://serviceuser.conf"
-FILESEXTRAPATHS:prepend:sulka := "${THISDIR}/files:"
+SRC_URI:append:sulka-hardening = " file://serviceuser.conf"
+FILESEXTRAPATHS:prepend:sulka-hardening := "${THISDIR}/files:"
 
-do_install:append:sulka () {
+do_install:append:sulka-hardening () {
     install -m 440 ${UNPACKDIR}/serviceuser.conf ${D}${sysconfdir}/sudoers.d/serviceuser
     sed -i "s/@@SULKA_SERVICEUSER_USERNAME@@/${SULKA_SERVICEUSER_USERNAME}/g" ${D}${sysconfdir}/sudoers.d/serviceuser
 

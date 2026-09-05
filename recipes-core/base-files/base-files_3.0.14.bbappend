@@ -23,7 +23,7 @@ do_install:append:sulka-harden-mounts () {
         bbfatal "SULKA_HARDEN_MOUNTS: /var/volatile not hardened in ${sysconfdir}/fstab"
 }
 
-do_install:append:sulka () {
+do_install:append:sulka-hardening () {
     sed -i 's/umask.*/umask 027/g' ${D}/${sysconfdir}/profile
 
     # Rugix writes during early boot process to the /run, and mounting
@@ -34,7 +34,7 @@ do_install:append:sulka () {
     fi
 }
 
-do_install_basefilesissue:append:sulka () {
+do_install_basefilesissue:append:sulka-hardening () {
     echo "${ISSUE_MESSAGE}" >> ${D}/${sysconfdir}/issue
 
     echo "${ISSUE_MESSAGE}" > ${D}/${sysconfdir}/issue.net
