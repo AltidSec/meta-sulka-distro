@@ -1,4 +1,4 @@
-FILESEXTRAPATHS:prepend:sulka := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS:prepend:sulka-hardening := "${THISDIR}/${PN}:"
 
-AIDE_INCLUDE_DIRS:sulka = ""
-AIDE_SKIP_DIRS:sulka    = ""
+AIDE_INCLUDE_DIRS:sulka-hardening = ""
+AIDE_SKIP_DIRS:sulka-hardening    = ""

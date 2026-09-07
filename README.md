@@ -7,7 +7,7 @@ It ships hardened defaults across the kernel, the bootloader and the userspace, 
 
 ## What This Layer Provides
 
-- **The distro definition.** `conf/distro/sulka.conf` sets the `sulka` distro: a minimised `DISTRO_FEATURES` set with an explicit opt-out list, the default init manager, the package format, and the SPDX/CVE tooling used to produce a software bill of materials for every image.
+- **The distro definition.** `conf/distro/sulka.conf` sets the `sulka` distro. It is deliberately thin: distro identity and build configuration only. The hardening itself lives in `conf/distro/include/`, split into `sulka-image.inc` (distro features, package selection, SBOM tooling, read-only root file system), `sulka-userspace.inc` (users and login, mount options, SSH, mandatory access control) and `sulka-kernel.inc`, gathered by `conf/distro/include/sulka-hardening.inc`.
 - **Login and user hardening.** Root and `sync` logins are disabled by setting their shells to `nologin`. An optional service user can be created, with a `sudo` configuration template for privileged actions. PAM enforces password quality, core dumps are disabled through `limits.d`, and password expiration can be enabled.
 - **Firewall.** The `nftables-configuration` recipe ships a service, an init script and a set of rule templates, ranging from dropping all traffic in every direction to allowing established connections, loopback, SSH and ICMP.
 - **Mandatory access control.** SELinux is supported through `meta-selinux`. The content lives under `dynamic-layers/selinux/` and activates only when that layer is present.
@@ -15,6 +15,14 @@ It ships hardened defaults across the kernel, the bootloader and the userspace, 
 - **Image post-processing.** A rootfs postprocess class applies the final hardening steps, SSH keys can optionally be installed at build time, and a variable-check class fails the build on dangerous settings such as `DEBUG_TWEAKS`.
 - **Read-only root file system** support, including the image feature and file system type wiring.
 - **License hygiene.** GPLv3 components are avoided.
+
+## Using the Hardening From Another Distro
+
+The hardening is not tied to the `sulka` distro. Nothing under `conf/distro/include/` sets `DISTRO` or any other distro identity variable, and the recipe metadata is tied to `sulka-hardening` override rather than the distro name, so an existing distro can adopt it by adding this layer to `BBLAYERS` and requiring the same file `sulka.conf` does:
+
+```
+require conf/distro/include/sulka-hardening.inc
+```
 
 ## Layer Information
 

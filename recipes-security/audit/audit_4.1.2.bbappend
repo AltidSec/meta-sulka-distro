@@ -1,6 +1,6 @@
-FILESEXTRAPATHS:prepend:sulka := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS:prepend:sulka-hardening := "${THISDIR}/${PN}:"
 
-SRC_URI:append:sulka = " \
+SRC_URI:append:sulka-hardening = " \
     file://55-sulka.rules \
     file://0004-Load-rules-with-auditctl-before-starting-auditd.patch \
 "
@@ -23,7 +23,7 @@ AUDIT_RULES_TO_INSTALL = " \
     99-finalize.rules \
 "
 
-do_install:append:sulka () {
+do_install:append:sulka-hardening () {
     # Remove the default rules from rules.d to have a clean directory
     rm ${D}/etc/audit/rules.d/audit.rules
     rm ${D}/etc/audit/audit.rules

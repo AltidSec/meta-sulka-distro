@@ -1,3 +1,3 @@
-PACKAGECONFIG:append:sulka = " cron"
+PACKAGECONFIG:append:sulka-hardening = " cron"
 
 RDEPENDS:${PN}:append = " cronie "
