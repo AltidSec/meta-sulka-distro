@@ -34,11 +34,11 @@ require conf/distro/include/sulka-hardening.inc
 | Depends on | `core`, `networking-layer`, `security`, `openembedded-layer` |
 | Conditional dependencies | `selinux` when SELinux is the mandatory access control module, `meta-sulka-kernel` when kernel hardening or graphics removal is enabled |
 
-This layer can be used outside the kas Sulka build, but most of its bbappends name the exact upstream version they apply to, which ties it to particular versions of `openembedded-core` and `meta-openembedded`.
-A mismatch fails the build as a dangling bbappend rather than quietly dropping the hardening, so version drift is easy to spot.
+This layer can be used outside the kas Sulka build as well.
+Its bbappends wildcard the patch release of the recipe version they target, so they should apply to `wrynose` recipes regardless of the exact used Yocto version.
+A version that does not line up fails the build as a dangling bbappend rather than quietly dropping the hardening, so version drift is easy to spot.
 
-The easiest route is therefore the [kas Sulka](https://codeberg.org/AltidSec/kas-sulka) build configuration, which pins compatible revisions of everything listed above, but integrating the layer into an existing build works too as long as the recipe versions line up.
-In the long run the goal is for this to be a general-purpose add-on layer, with the bbappends following each recipe's major version rather than an exact one.
+The [kas Sulka](https://codeberg.org/AltidSec/kas-sulka) build configuration pins compatible revisions of dependencies and it is the combination each release is tested against.
 
 ## Documentation
 
