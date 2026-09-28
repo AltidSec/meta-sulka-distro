@@ -5,7 +5,7 @@ SRC_URI:append:sulka-hardening = " \
     file://0004-Load-rules-with-auditctl-before-starting-auditd.patch \
 "
 
-SRC_URI:append:aarch64 = " file://0003-Remove-arm-aarch64-incompatible-syscalls.patch "
+SRC_URI:append:aarch64:sulka-hardening = " file://0003-Remove-arm-aarch64-incompatible-syscalls.patch "
 
 SYSTEMD_SERVICE:auditd = "auditd.service"
 
