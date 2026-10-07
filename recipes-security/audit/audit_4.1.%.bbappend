@@ -7,7 +7,7 @@ SRC_URI:append:sulka-hardening = " \
 
 SRC_URI:append:aarch64:sulka-hardening = " file://0003-Remove-arm-aarch64-incompatible-syscalls.patch "
 
-SYSTEMD_SERVICE:auditd = "auditd.service"
+SYSTEMD_SERVICE:auditd:sulka-hardening = "auditd.service"
 
 # Note that if these are changed, the pkg_postinst_ontarget function needs to be
 # revised as it makes changes to 30-stig and 31-privileged rules
