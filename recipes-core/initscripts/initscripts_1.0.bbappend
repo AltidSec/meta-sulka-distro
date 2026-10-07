@@ -1,3 +1,3 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend:sulka-hardening := "${THISDIR}/files:"
 
-SRC_URI:append = " file://0001-initscripts-Fix-bootmisc-date-calls.patch;patchdir=${WORKDIR} "
+SRC_URI:append:sulka-hardening = " file://0001-initscripts-Fix-bootmisc-date-calls.patch;patchdir=${WORKDIR} "
