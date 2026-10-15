@@ -57,3 +57,28 @@ QB_DEFAULT_FSTYPE:sulka-read-only-rootfs = "erofs"
 QB_KERNEL_ROOT:sulka-read-only-rootfs = "/dev/vda ro"
 APPEND:append:sulka-read-only-rootfs = " ro "
 CMDLINE:append:sulka-read-only-rootfs = " ro "
+
+# The image type of the rootfs, for example for writing it into a disk image
+SULKA_ROOTFS_IMAGE_TYPE ??= "ext4"
+SULKA_ROOTFS_IMAGE_TYPE:sulka-read-only-rootfs = "erofs"
+
+# Verified boot from U-Boot onwards. U-Boot boots only FIT images whose
+# configuration is signed with UBOOT_SIGN_KEYNAME from UBOOT_SIGN_KEYDIR. The
+# FIT image contains the kernel and the device tree. The root of trust that
+# verifies U-Boot itself is platform specific and not provided. Disabled by
+# default, as this feature is quite hardware and setup specific. qemuarm64
+# can be used as an example reference of this.
+SULKA_ENABLE_VERIFIED_BOOT ??= "0"
+OVERRIDES:append = "${@":sulka-verified-boot" if d.getVar('SULKA_ENABLE_VERIFIED_BOOT') == "1" else ""}"
+UBOOT_SIGN_ENABLE:sulka-verified-boot = "1"
+FIT_SIGN_INDIVIDUAL:sulka-verified-boot = "0"
+FIT_HASH_ALG:sulka-verified-boot = "sha256"
+FIT_SIGN_ALG:sulka-verified-boot = "rsa4096"
+FIT_SIGN_NUMBITS:sulka-verified-boot = "4096"
+KERNEL_CLASSES:append:sulka-verified-boot = " kernel-fit-extra-artifacts"
+# The recipe that builds the FIT image of the kernel. Default to empty, as it
+# should be defined in the same place as where the verified boot is enabled.
+SULKA_FIT_IMAGE_RECIPE ??= ""
+EXTRA_IMAGEDEPENDS:append:sulka-verified-boot = " ${SULKA_FIT_IMAGE_RECIPE} virtual/bootloader"
+# Rebuild disk images that contain the FIT image whenever it changes
+do_image_wic[depends] += "${@'%s:do_deploy' % d.getVar('SULKA_FIT_IMAGE_RECIPE') if d.getVar('SULKA_ENABLE_VERIFIED_BOOT') == '1' else ''}"

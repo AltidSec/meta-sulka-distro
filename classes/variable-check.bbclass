@@ -62,6 +62,29 @@ python check_module_signing_keys () {
                      "MODSIGN_KEY_DIR and IMA_EVM_ROOT_CA variables.")
 }
 
+addhandler check_verified_boot
+check_verified_boot[eventmask] = "bb.event.ConfigParsed bb.event.MultiConfigParsed"
+
+python check_verified_boot () {
+    import os
+
+    if d.getVar('SULKA_ENABLE_VERIFIED_BOOT') != "1":
+        return
+
+    if not d.getVar('SULKA_FIT_IMAGE_RECIPE'):
+        bb.fatal("SULKA_ENABLE_VERIFIED_BOOT requires that you set the FIT image recipe name to SULKA_FIT_IMAGE_RECIPE.")
+
+    if not (d.getVar('PREFERRED_PROVIDER_virtual/bootloader') or '').startswith('u-boot'):
+        bb.fatal("SULKA_ENABLE_VERIFIED_BOOT requires U-Boot as the bootloader (PREFERRED_PROVIDER_virtual/bootloader).")
+
+    keydir = d.getVar('UBOOT_SIGN_KEYDIR') or ''
+    keyname = d.getVar('UBOOT_SIGN_KEYNAME') or ''
+    if not keydir or not keyname or not os.path.exists(os.path.join(keydir, keyname + '.key')):
+        bb.fatal("SULKA_ENABLE_VERIFIED_BOOT requires a FIT signing key, but %s/%s.key does not exist.\n"
+                 "Generate the keys with generate_fit_signing_keys.sh in kas-sulka and set UBOOT_SIGN_KEYDIR and UBOOT_SIGN_KEYNAME."
+                 % (keydir or '<UBOOT_SIGN_KEYDIR>', keyname or '<UBOOT_SIGN_KEYNAME>'))
+}
+
 addhandler selinux_variables
 selinux_variables[eventmask] = "bb.event.ConfigParsed bb.event.MultiConfigParsed"
 

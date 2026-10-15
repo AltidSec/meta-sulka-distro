@@ -1,0 +1,6 @@
+# short-description: Signed FIT image and read-only rootfs for qemuarm64
+# The first partition holds the signed FIT image U-Boot loads. The second
+# holds the rootfs image as built.
+part --source bootimg_partition --ondisk vda --fstype=vfat --label boot --align 1024 --fixed-size 64M
+part / --source rawcopy --sourceparams="file=${IMGDEPLOYDIR}/${IMAGE_LINK_NAME}.${SULKA_ROOTFS_IMAGE_TYPE}" --ondisk vda --align 1024
+bootloader --ptable gpt

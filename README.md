@@ -7,13 +7,14 @@ It ships hardened defaults across the kernel, the bootloader and the userspace, 
 
 ## What This Layer Provides
 
-- **The distro definition.** `conf/distro/sulka.conf` sets the `sulka` distro. It is deliberately thin: distro identity and build configuration only. The hardening itself lives in `conf/distro/include/`, split into `sulka-image.inc` (distro features, package selection, SBOM tooling, read-only root file system), `sulka-userspace.inc` (users and login, mount options, SSH, mandatory access control) and `sulka-kernel.inc`, gathered by `conf/distro/include/sulka-hardening.inc`.
+- **The distro definition.** `conf/distro/sulka.conf` sets the `sulka` distro. It is deliberately thin: distro identity and build configuration only. The hardening itself lives in `conf/distro/include/`, split into `sulka-image.inc` (distro features, package selection, SBOM tooling, read-only root file system, verified boot), `sulka-userspace.inc` (users and login, mount options, SSH, mandatory access control) and `sulka-kernel.inc`, gathered by `conf/distro/include/sulka-hardening.inc`.
 - **Login and user hardening.** Root and `sync` logins are disabled by setting their shells to `nologin`. An optional service user can be created, with a `sudo` configuration template for privileged actions. PAM enforces password quality, core dumps are disabled through `limits.d`, and password expiration can be enabled.
 - **Firewall.** The `nftables-configuration` recipe ships a service, an init script and a set of rule templates, ranging from dropping all traffic in every direction to allowing established connections, loopback, SSH and ICMP.
 - **Mandatory access control.** SELinux is supported through `meta-selinux`. The content lives under `dynamic-layers/selinux/` and activates only when that layer is present.
 - **Auditing and logging.** `auditd` is configured with STIG rule set, and `syslog-ng` is the default syslog provider.
 - **Image post-processing.** A rootfs postprocess class applies the final hardening steps, SSH keys can optionally be installed at build time, and a variable-check class fails the build on dangerous settings such as `DEBUG_TWEAKS`.
 - **Read-only root file system** support, including the image feature and file system type wiring.
+- **Verified boot** of signed FIT images, with the signing configuration and the build-time checks. The U-Boot side is in `meta-sulka-bsp`.
 - **License hygiene.** GPLv3 components are avoided.
 
 ## Using the Hardening From Another Distro
@@ -32,7 +33,7 @@ require conf/distro/include/sulka-hardening.inc
 | Priority | 11 |
 | Yocto compatibility | Wrynose (`LAYERSERIES_COMPAT = "wrynose"`) |
 | Depends on | `core`, `networking-layer`, `security`, `openembedded-layer` |
-| Conditional dependencies | `selinux` when SELinux is the mandatory access control module, `meta-sulka-kernel` when kernel hardening or graphics removal is enabled |
+| Conditional dependencies | `selinux` when SELinux is the mandatory access control module, `meta-sulka-kernel` when kernel hardening or graphics removal is enabled, `meta-sulka-bsp` when verified boot is enabled |
 
 This layer can be used outside the kas Sulka build as well.
 Its bbappends wildcard the patch release of the recipe version they target, so they should apply to `wrynose` recipes regardless of the exact used Yocto version.
