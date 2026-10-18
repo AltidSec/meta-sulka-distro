@@ -76,6 +76,7 @@ FIT_HASH_ALG:sulka-verified-boot = "sha256"
 FIT_SIGN_ALG:sulka-verified-boot = "rsa4096"
 FIT_SIGN_NUMBITS:sulka-verified-boot = "4096"
 KERNEL_CLASSES:append:sulka-verified-boot = " kernel-fit-extra-artifacts"
+INHERIT += "${@"sulka-verified-boot" if d.getVar('SULKA_ENABLE_VERIFIED_BOOT') == "1" else ""}"
 # The recipe that builds the FIT image of the kernel. Default to empty, as it
 # should be defined in the same place as where the verified boot is enabled.
 SULKA_FIT_IMAGE_RECIPE ??= ""
