@@ -51,7 +51,6 @@ SULKA_ENABLE_READ_ONLY_ROOTFS ??= "1"
 OVERRIDES:append = "${@":sulka-read-only-rootfs" if d.getVar('SULKA_ENABLE_READ_ONLY_ROOTFS') == "1" else ""}"
 EXTRA_IMAGE_FEATURES:append:sulka-read-only-rootfs = " read-only-rootfs"
 IMAGE_FSTYPES:append:sulka-read-only-rootfs = " erofs"
-QB_DEFAULT_FSTYPE:sulka-read-only-rootfs = "erofs"
 # Attempt to add ro kernel boot parameter. There doesn't seem to be one
 # standard way of doing this
 QB_KERNEL_ROOT:sulka-read-only-rootfs = "/dev/vda ro"
@@ -61,6 +60,7 @@ CMDLINE:append:sulka-read-only-rootfs = " ro "
 # The image type of the rootfs, for example for writing it into a disk image
 SULKA_ROOTFS_IMAGE_TYPE ??= "ext4"
 SULKA_ROOTFS_IMAGE_TYPE:sulka-read-only-rootfs = "erofs"
+QB_DEFAULT_FSTYPE:sulka-read-only-rootfs = "${SULKA_ROOTFS_IMAGE_TYPE}"
 
 # Verified boot from U-Boot onwards. U-Boot boots only FIT images whose
 # configuration is signed with UBOOT_SIGN_KEYNAME from UBOOT_SIGN_KEYDIR. The
@@ -97,3 +97,21 @@ SULKA_ENABLE_INITRAMFS ??= "${@'1' if d.getVar('SULKA_FEATURES_REQUIRING_INITRAM
 OVERRIDES:append = "${@":sulka-initramfs" if d.getVar('SULKA_ENABLE_INITRAMFS') == "1" else ""}"
 INITRAMFS_IMAGE:sulka-initramfs = "sulka-image-initramfs"
 INITRAMFS_IMAGE_BUNDLE:sulka-initramfs = "${@'0' if d.getVar('SULKA_ENABLE_VERIFIED_BOOT') == '1' else '1'}"
+
+# Protect the read-only rootfs with dm-verity. The hash tree is appended
+# to the rootfs image and the root hash is stored in the initramfs. With
+# verified boot the initramfs is part of the signed FIT image. Without it
+# the initramfs is bundled into the kernel image, and the root hash is only
+# as trustworthy as the unverified kernel image that carries it. Enabled by
+# default whenever the rootfs is read-only.
+SULKA_ENABLE_DM_VERITY ??= "${SULKA_ENABLE_READ_ONLY_ROOTFS}"
+OVERRIDES:append = "${@":sulka-dm-verity" if d.getVar('SULKA_ENABLE_DM_VERITY') == "1" else ""}"
+SULKA_FEATURES_REQUIRING_INITRAMFS:append:sulka-dm-verity = " dm-verity"
+IMAGE_CLASSES:append:sulka-dm-verity = " dm-verity-img"
+DM_VERITY_IMAGE_TYPE ?= "erofs"
+DM_VERITY_IMAGE_DATA_BLOCK_SIZE ?= "4096"
+SULKA_ROOTFS_IMAGE_TYPE:sulka-dm-verity = "${DM_VERITY_IMAGE_TYPE}.verity"
+# The LUKS2 SSH token plugin fetches keys over the network and links libssh,
+# which pulls libgcrypt, libcap and libpam into the initramfs. Disable the
+# plugin by default
+PACKAGECONFIG:remove:pn-cryptsetup = "ssh-token"

@@ -95,6 +95,20 @@ python check_initramfs () {
                  "Enable the initramfs with SULKA_ENABLE_INITRAMFS = \"1\" or disable the features." % ', '.join(features))
 }
 
+addhandler check_dm_verity
+check_dm_verity[eventmask] = "bb.event.ConfigParsed bb.event.MultiConfigParsed"
+
+python check_dm_verity () {
+    if d.getVar('SULKA_ENABLE_DM_VERITY') != "1":
+        return
+    if d.getVar('SULKA_ENABLE_READ_ONLY_ROOTFS') != "1":
+        bb.fatal("SULKA_ENABLE_DM_VERITY requires a read-only rootfs.\n"
+                 "Set SULKA_ENABLE_READ_ONLY_ROOTFS = \"1\" or disable dm-verity with SULKA_ENABLE_DM_VERITY = \"0\".")
+    if not d.getVar('DM_VERITY_IMAGE'):
+        bb.fatal("SULKA_ENABLE_DM_VERITY requires that you set DM_VERITY_IMAGE to the image recipe dm-verity protects.\n"
+                 "Set it to your target image, for example DM_VERITY_IMAGE = \"core-image-base\", or disable dm-verity with SULKA_ENABLE_DM_VERITY = \"0\".")
+}
+
 addhandler selinux_variables
 selinux_variables[eventmask] = "bb.event.ConfigParsed bb.event.MultiConfigParsed"
 
