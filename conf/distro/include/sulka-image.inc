@@ -64,10 +64,10 @@ SULKA_ROOTFS_IMAGE_TYPE:sulka-read-only-rootfs = "erofs"
 
 # Verified boot from U-Boot onwards. U-Boot boots only FIT images whose
 # configuration is signed with UBOOT_SIGN_KEYNAME from UBOOT_SIGN_KEYDIR. The
-# FIT image contains the kernel and the device tree. The root of trust that
-# verifies U-Boot itself is platform specific and not provided. Disabled by
-# default, as this feature is quite hardware and setup specific. qemuarm64
-# can be used as an example reference of this.
+# FIT image contains the kernel, the device tree and the initramfs. The root of
+# trust that verifies U-Boot itself is platform specific and not provided.
+# Disabled by default, as this feature is quite hardware and setup specific.
+# qemuarm64 can be used as an example reference of this.
 SULKA_ENABLE_VERIFIED_BOOT ??= "0"
 OVERRIDES:append = "${@":sulka-verified-boot" if d.getVar('SULKA_ENABLE_VERIFIED_BOOT') == "1" else ""}"
 UBOOT_SIGN_ENABLE:sulka-verified-boot = "1"
@@ -83,3 +83,17 @@ SULKA_FIT_IMAGE_RECIPE ??= ""
 EXTRA_IMAGEDEPENDS:append:sulka-verified-boot = " ${SULKA_FIT_IMAGE_RECIPE} virtual/bootloader"
 # Rebuild disk images that contain the FIT image whenever it changes
 do_image_wic[depends] += "${@'%s:do_deploy' % d.getVar('SULKA_FIT_IMAGE_RECIPE') if d.getVar('SULKA_ENABLE_VERIFIED_BOOT') == '1' else ''}"
+
+# Internal. The features that require the initramfs add themselves here,
+# which enables the initramfs and selects its modules in
+# sulka-image-initramfs. Enable the features instead of setting this.
+SULKA_FEATURES_REQUIRING_INITRAMFS = ""
+
+# Build sulka-image-initramfs. With verified boot it is added to the FIT
+# image, otherwise it is bundled into the kernel image. Enabled by default
+# only when a feature needs it. Set to "1" to use the initramfs without such
+# a feature.
+SULKA_ENABLE_INITRAMFS ??= "${@'1' if d.getVar('SULKA_FEATURES_REQUIRING_INITRAMFS').split() else '0'}"
+OVERRIDES:append = "${@":sulka-initramfs" if d.getVar('SULKA_ENABLE_INITRAMFS') == "1" else ""}"
+INITRAMFS_IMAGE:sulka-initramfs = "sulka-image-initramfs"
+INITRAMFS_IMAGE_BUNDLE:sulka-initramfs = "${@'0' if d.getVar('SULKA_ENABLE_VERIFIED_BOOT') == '1' else '1'}"

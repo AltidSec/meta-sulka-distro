@@ -85,6 +85,16 @@ python check_verified_boot () {
                  % (keydir or '<UBOOT_SIGN_KEYDIR>', keyname or '<UBOOT_SIGN_KEYNAME>'))
 }
 
+addhandler check_initramfs
+check_initramfs[eventmask] = "bb.event.ConfigParsed bb.event.MultiConfigParsed"
+
+python check_initramfs () {
+    features = (d.getVar('SULKA_FEATURES_REQUIRING_INITRAMFS') or '').split()
+    if features and d.getVar('SULKA_ENABLE_INITRAMFS') != "1":
+        bb.fatal("SULKA_ENABLE_INITRAMFS is disabled but these features need the initramfs: %s\n"
+                 "Enable the initramfs with SULKA_ENABLE_INITRAMFS = \"1\" or disable the features." % ', '.join(features))
+}
+
 addhandler selinux_variables
 selinux_variables[eventmask] = "bb.event.ConfigParsed bb.event.MultiConfigParsed"
 
