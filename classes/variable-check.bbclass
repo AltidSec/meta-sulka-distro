@@ -119,3 +119,14 @@ python selinux_variables () {
                  "Fixfiles script needed for relabeling relies on bash, which is not included due to its GPLv3 License.\n"
                  "If you need run-time relabeling, please open an issue at https://codeberg.org/AltidSec/meta-sulka-distro/issues")
 }
+
+addhandler check_password_expiry
+check_password_expiry[eventmask] = "bb.event.ConfigParsed bb.event.MultiConfigParsed"
+
+python check_password_expiry () {
+    if (d.getVar('SULKA_EXPIRE_PASSWORDS') == "1" and d.getVar('SULKA_ENABLE_READ_ONLY_ROOTFS') == "1"
+            and d.getVar('SULKA_WRITABLE_PASSWORD_STORAGE') != "1"):
+        bb.fatal("SULKA_EXPIRE_PASSWORDS and SULKA_ENABLE_READ_ONLY_ROOTFS are both enabled.\n"
+                 "The password is expired at the first login, and changing it fails on a read-only rootfs.\n"
+                 "If your partition layout keeps /etc writable, set SULKA_WRITABLE_PASSWORD_STORAGE = \"1\".")
+}
