@@ -27,6 +27,14 @@ SULKA_EXPIRE_PASSWORDS ??= "0"
 SULKA_EXPIRE_PASSWORDS:sulka-compliancy = "1"
 OVERRIDES:append = "${@":sulka-expire-passwords" if d.getVar('SULKA_EXPIRE_PASSWORDS') == "1" else ""}"
 
+# Password expiration needs a writable password database, as the expired password must be
+# changed at the first login. PAM writes the new /etc/shadow as a temporary file in /etc and
+# renames it over the old one, so /etc itself must be writable; a writable /etc/shadow alone is
+# not enough. On a read-only rootfs the change fails and nobody can log in, so the build stops
+# if both are enabled. If your partition layout keeps /etc writable, set this to "1" to allow
+# the combination. It only disables the check; Sulka doesn't set up such a location
+SULKA_WRITABLE_PASSWORD_STORAGE ??= "0"
+
 # Harden the mount options of the default mounts of the system: base-files'
 # stock fstab (hidepid on /proc, nodev,nosuid,noexec on the volatile tmpfs
 # mounts) and systemd's tmp.mount unit (noexec on /tmp). Mounts that you add
