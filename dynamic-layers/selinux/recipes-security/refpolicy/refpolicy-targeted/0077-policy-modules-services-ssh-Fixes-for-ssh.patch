@@ -39,7 +39,7 @@ index 8c9e61901..818be318e 100644
  
  ## <desc>
  ## <p>
-@@ -292,6 +300,7 @@ ifdef(`init_systemd',`
+@@ -300,6 +300,7 @@ ifdef(`init_systemd',`
  	init_stream_connect(sshd_t)
  	init_rw_stream_sockets(sshd_t)
  	systemd_write_inherited_logind_sessions_pipes(sshd_t)

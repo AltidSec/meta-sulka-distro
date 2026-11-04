@@ -18,7 +18,7 @@ diff --git a/policy/modules/services/ssh.te b/policy/modules/services/ssh.te
 index 6994ea8d3..ba6f660d4 100644
 --- a/policy/modules/services/ssh.te
 +++ b/policy/modules/services/ssh.te
-@@ -365,6 +365,17 @@ allow ssh_keygen_t self:unix_stream_socket create_stream_socket_perms;
+@@ -368,6 +368,17 @@ allow ssh_keygen_t self:unix_stream_socket create_stream_socket_perms;
  
  allow ssh_keygen_t sshd_key_t:file manage_file_perms;
  files_etc_filetrans(ssh_keygen_t, sshd_key_t, file)

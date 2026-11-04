@@ -18,7 +18,7 @@ diff --git a/policy/modules/system/sysnetwork.te b/policy/modules/system/sysnetw
 index be98732e6..7611a7fde 100644
 --- a/policy/modules/system/sysnetwork.te
 +++ b/policy/modules/system/sysnetwork.te
-@@ -317,6 +317,8 @@ allow ifconfig_t self:netlink_route_socket create_netlink_socket_perms;
+@@ -323,6 +323,8 @@ allow ifconfig_t self:netlink_route_socket create_netlink_socket_perms;
  allow ifconfig_t self:netlink_xfrm_socket create_netlink_socket_perms;
  allow ifconfig_t self:tcp_socket { create ioctl };
  
