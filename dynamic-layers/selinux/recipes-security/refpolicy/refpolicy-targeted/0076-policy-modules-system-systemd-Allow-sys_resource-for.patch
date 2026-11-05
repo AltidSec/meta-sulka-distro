@@ -15,7 +15,7 @@ diff --git a/policy/modules/system/systemd.te b/policy/modules/system/systemd.te
 index 5823fd543..cb8d3e411 100644
 --- a/policy/modules/system/systemd.te
 +++ b/policy/modules/system/systemd.te
-@@ -1766,7 +1766,7 @@ systemd_log_parse_environment(systemd_sessions_t)
+@@ -1770,7 +1770,7 @@ systemd_log_parse_environment(systemd_sessions_t)
  # sys_admin for sysctls such as kernel.kptr_restrict and kernel.dmesg_restrict
  # sys_ptrace for kernel.yama.ptrace_scope
  # net_admin for network sysctls

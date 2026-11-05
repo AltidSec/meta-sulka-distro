@@ -15,7 +15,7 @@ Similarly, SSH command itself needs to access these runtime directories
 diff --git a/policy/modules/services/ssh.te b/policy/modules/services/ssh.te
 --- a/policy/modules/services/ssh.te
 +++ b/policy/modules/services/ssh.te
-@@ -338,6 +338,17 @@ allow ssh_keygen_t self:unix_stream_socket create_stream_socket_perms;
+@@ -339,6 +339,17 @@ allow ssh_keygen_t self:unix_stream_socket create_stream_socket_perms;
 
  allow ssh_keygen_t sshd_key_t:file manage_file_perms;
  files_etc_filetrans(ssh_keygen_t, sshd_key_t, file)

@@ -43,7 +43,7 @@ diff --git a/syslog-ng.conf.systemd b/syslog-ng.conf.systemd
 index 851bf252b7..0602fb1d7a 100644
 --- a/syslog-ng.conf.systemd
 +++ b/syslog-ng.conf.systemd
-@@ -71,13 +71,6 @@ destination d_console { usertty("root"); };
+@@ -70,13 +70,6 @@ destination d_console { usertty("root"); };
  #
  destination d_console_all { file("/dev/tty10"); };
  
@@ -57,7 +57,7 @@ index 851bf252b7..0602fb1d7a 100644
  # Send the messages to an other host
  #
  #destination d_net { tcp("127.0.0.1" port(1000) authentication(on) encrypt(on) log_fifo_size(1000)); };
-@@ -151,8 +144,7 @@ log { source(s_src); filter(f_debug); destination(d_debug); };
+@@ -150,8 +143,7 @@ log { source(s_src); filter(f_debug); destination(d_debug); };
  log { source(s_src); filter(f_error); destination(d_error); };
  log { source(s_src); filter(f_messages); destination(d_messages); };
  
@@ -71,7 +71,7 @@ diff --git a/syslog-ng.conf.sysvinit b/syslog-ng.conf.sysvinit
 index 70afd0da84..8cbbf5dbef 100644
 --- a/syslog-ng.conf.sysvinit
 +++ b/syslog-ng.conf.sysvinit
-@@ -71,13 +71,6 @@ destination d_console { usertty("root"); };
+@@ -70,13 +70,6 @@ destination d_console { usertty("root"); };
  #
  destination d_console_all { file("/dev/tty10"); };
  
@@ -85,7 +85,7 @@ index 70afd0da84..8cbbf5dbef 100644
  # Send the messages to an other host
  #
  #destination d_net { tcp("127.0.0.1" port(1000) authentication(on) encrypt(on) log_fifo_size(1000)); };
-@@ -151,8 +144,7 @@ log { source(s_src); filter(f_debug); destination(d_debug); };
+@@ -150,8 +143,7 @@ log { source(s_src); filter(f_debug); destination(d_debug); };
  log { source(s_src); filter(f_error); destination(d_error); };
  log { source(s_src); filter(f_messages); destination(d_messages); };
  
