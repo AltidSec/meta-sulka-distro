@@ -39,7 +39,7 @@ SULKA_DEFAULT_EXTRA_RDEPENDS:append = "${@" packagegroup-sulka-monitoring " if d
 
 INHERIT += "create-spdx"
 
-IMAGE_CLASSES:append = " sbom-cve-check"
+IMAGE_CLASSES:append = " sulka-sbom-cve-check"
 SRCREV:pn-sbom-cve-check-update-nvd-native ??= "${AUTOREV}"
 SRCREV:pn-sbom-cve-check-update-cvelist-native ??= "${AUTOREV}"
 SPDX_INCLUDE_VEX = "all"
